@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Khyati's Website"
+  navbar:
+    left:
+      - href: index.qmd
+        text: About
+      - href: resume.qmd
+        text: Resume
+      - href: projects.qmd  # <-- add this
+        text: Projects
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+      - minty
+    css: styles.css
+    toc: true

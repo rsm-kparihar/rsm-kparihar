@@ -1,0 +1,12 @@
+{
+  "hash": "b3d089cfb5ce88039321c5a15003009e",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Analysis of Cars\"\nauthor: Your Name\ndate: today\n---\n\n# Header\n\nLet's investigate the relationship between fuel efficiency (`mpg`) and engine displacement (`disp`) from the `mtcars` dataset. Those variables have a correlation of `r cor(mtcars$mpg, mtcars$disp) |> format(digits=2)`.\n\n## Sub-Header\n\nHere is a plot:\n\n::: {#f43f12b0 .cell execution_count=1}\n``` {.python .cell-code}\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\nmtcars = pd.read_csv(\"https://raw.githubusercontent.com/plotly/datasets/master/mtcars.csv\")\n\nplt.scatter(mtcars[\"mpg\"], mtcars[\"disp\"], c=\"dodgerblue\", s=30)\nplt.xlabel(\"mpg\")\nplt.ylabel(\"disp\")\nplt.show()\n```\n\n::: {.cell-output .cell-output-display}\n![](index_files/figure-html/cell-2-output-1.png){width=600 height=429}\n:::\n:::\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
