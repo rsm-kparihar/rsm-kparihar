@@ -16,5 +16,20 @@
   },
   "projects/project2/index.qmd": {
     "index.html": "28cd8766"
+  },
+  "hw1_questions_ans.qmd": {
+    "hw1_questions_ans.html": "e4af227e"
+  },
+  "projects/project2/hw1_questions_ans.qmd": {
+    "hw1_questions_ans.html": "0b50e5fe"
+  },
+  "blogs.qmd": {
+    "blogs.html": "55ba6a44"
+  },
+  "Blogs/project2/hw1_questions_ans.qmd": {
+    "hw1_questions_ans.html": "2ac13bf3"
+  },
+  "Blogs/project1/index.qmd": {
+    "index.html": "c713c0a5"
   }
 }

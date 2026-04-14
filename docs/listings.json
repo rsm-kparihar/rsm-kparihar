@@ -1,9 +1,13 @@
 [
   {
     "listing": "/projects.html",
+    "items": []
+  },
+  {
+    "listing": "/blogs.html",
     "items": [
-      "/projects/project1/index.html",
-      "/projects/project2/index.html"
+      "/Blogs/project2/hw1_questions_ans.html",
+      "/Blogs/project1/index.html"
     ]
   }
 ]

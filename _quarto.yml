@@ -10,8 +10,8 @@ website:
         text: About
       - href: resume.qmd
         text: Resume
-      - href: projects.qmd  # <-- add this
-        text: Projects
+      - href: blogs.qmd  # <-- add this
+        text: Blogs
 
 format:
   html:

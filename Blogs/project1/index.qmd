@@ -1,6 +1,6 @@
 ---
 title: "Analysis of Cars"
-author: Your Name
+author: Khyati Parihar
 date: today
 ---
 
