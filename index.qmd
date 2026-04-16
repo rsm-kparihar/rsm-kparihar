@@ -1,6 +1,7 @@
 ---
 title: ""
 page-layout: full
+body-classes: home-page
 format:
   html:
     css: styles.css
@@ -50,18 +51,18 @@ I build clear, thoughtful work around data, experimentation, and analysis.
 ## Featured Sections
 
 <div class="feature-row">
-  <a href="resume.html" class="feature-card">
+<a href="resume.html" class="feature-card">
 <h3>Resume</h3>
 <p>See my background, skills, and experience.</p>
-  </a>
+</a>
 
-  <a href="blogs.html" class="feature-card">
+<a href="blogs.html" class="feature-card">
 <h3>Blogs</h3>
 <p>Read short pieces on analysis, statistics, and data thinking.</p>
-  </a>
+</a>
 
-  <a href="mailto:khyatiparihar@gmail.com" class="feature-card">
+<a href="mailto:khyatiparihar@gmail.com" class="feature-card" target="_blank" rel="noopener noreferrer">
 <h3>Let's chat!</h3>
 <p>khyatiparihar@gmail.com</p>
-  </a>
+</a>
 </div>
