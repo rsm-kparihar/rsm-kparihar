@@ -1,10 +1,129 @@
 [
   {
+    "objectID": "blogs.html",
+    "href": "blogs.html",
+    "title": "My Blogs",
+    "section": "",
+    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\n\n\n\nApr 15, 2026\n\n\n\n\n\n\n\n\n\n\n\nAnalysis of Cars\n\n\n\n\n\n\nKhyati Parihar\n\n\nApr 15, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Marketing_Website",
+    "title": "Khyati Parihar",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "&lt;img src=\"IMG_8623_SnapseedCopy_SnapseedCopy%202.jpg\" class=\"profile-image\" alt=\"Khyati Parihar\"&gt;\n\n&lt;p class=\"tag\"&gt;Data • Analytics • Gen AI&lt;/p&gt;\n\n&lt;h1&gt;Khyati Parihar&lt;/h1&gt;\n\n&lt;p class=\"subtitle\"&gt;\n  I build clear, thoughtful work around data, experimentation, and analysis.\n&lt;/p&gt;\n\n&lt;div class=\"hero-buttons\"&gt;\n  &lt;a href=\"resume.html\" class=\"btn-primary\"&gt;View Resume&lt;/a&gt;\n  &lt;a href=\"blogs.html\" class=\"btn-secondary\"&gt;Read Blogs&lt;/a&gt;\n  &lt;a href=\"https://www.linkedin.com/in/khyati-parihar-961283174/\" class=\"btn-secondary\"&gt;LinkedIn&lt;/a&gt;\n  &lt;a href=\"https://github.com/rsm-kparihar\" class=\"btn-secondary\"&gt;GitHub&lt;/a&gt;\n&lt;/div&gt;"
+  },
+  {
+    "objectID": "index.html#about-me",
+    "href": "index.html#about-me",
+    "title": "Khyati Parihar",
+    "section": "About Me",
+    "text": "About Me\n\n\n&lt;h3&gt;What I Do&lt;/h3&gt;\n&lt;p&gt;I work on data analysis, storytelling, and practical insights that make technical work easier to understand.&lt;/p&gt;\n\n\n&lt;h3&gt;Focus Areas&lt;/h3&gt;\n&lt;p&gt;A/B testing, analytics, visualization, and writing about data-backed decisions.&lt;/p&gt;\n\n\n&lt;h3&gt;Current Work&lt;/h3&gt;\n&lt;p&gt;Exploring projects that combine statistics, experimentation, and communication.&lt;/p&gt;"
+  },
+  {
+    "objectID": "index.html#featured-sections",
+    "href": "index.html#featured-sections",
+    "title": "Khyati Parihar",
+    "section": "Featured Sections",
+    "text": "Featured Sections\n\n\n\nResume\n\n&lt;p&gt;See my background, skills, and experience.&lt;/p&gt;\n\n\n\nBlogs\n\n&lt;p&gt;Read short pieces on analysis, statistics, and data thinking.&lt;/p&gt;\n\n\n\nEmail Me\n\n&lt;p&gt;khyatiparihar@gmail.com&lt;/p&gt;"
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html",
+    "href": "Blogs/project2/hw1_questions_ans.html",
+    "title": "A/B Testing a Call to Action",
+    "section": "",
+    "text": "People who visit my website see a landing page with a prompt to join my newsletter. I want to know which version of that prompt gets more people to sign up. One says “Sign up for our newsletter here!” and the other says “Stay up to date by signing up!”. Even though the two messages are similar, little wording changes like this can influence what people do, so it makes sense to test them.\nTo do that, I run an A/B test where visitors are randomly split into two groups. One group sees CTA A, and the other sees CTA B. Then I compare the sign-up rates between the two groups. Since the visitors are assigned randomly, any meaningful difference in results can be treated as the effect of the wording itself."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#introduction",
+    "href": "Blogs/project2/hw1_questions_ans.html#introduction",
+    "title": "A/B Testing a Call to Action",
+    "section": "",
+    "text": "People who visit my website see a landing page with a prompt to join my newsletter. I want to know which version of that prompt gets more people to sign up. One says “Sign up for our newsletter here!” and the other says “Stay up to date by signing up!”. Even though the two messages are similar, little wording changes like this can influence what people do, so it makes sense to test them.\nTo do that, I run an A/B test where visitors are randomly split into two groups. One group sees CTA A, and the other sees CTA B. Then I compare the sign-up rates between the two groups. Since the visitors are assigned randomly, any meaningful difference in results can be treated as the effect of the wording itself."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#the-ab-test-as-a-statistical-problem",
+    "href": "Blogs/project2/hw1_questions_ans.html#the-ab-test-as-a-statistical-problem",
+    "title": "A/B Testing a Call to Action",
+    "section": "The A/B Test as a Statistical Problem",
+    "text": "The A/B Test as a Statistical Problem\nEach visitor has two possible outcomes: they either sign up for the newsletter or they do not. Because of that, I can think of each visit as a simple yes-or-no outcome. In statistics, this kind of outcome is often modeled with a Bernoulli random variable. I use \\(\\pi\\) to represent the probability that a visitor signs up. Since the wording of the CTA might affect that decision, I allow the sign-up probability to be different for each group. Visitors who see CTA A have a sign-up probability of \\(\\pi_A\\), while those who see CTA B have a sign-up probability of \\(\\pi_B\\).\nThe main thing I want to measure is the treatment effect,\n\\[\n\\theta = \\pi_A - \\pi_B\n\\]\nwhich is the difference in true sign-up rates between the two CTAs. A positive value means CTA A performs better, while a negative value means CTA B performs better.\nI estimate this quantity with the difference in sample means,\n\\[\n\\hat\\theta = \\bar{X}_A - \\bar{X}_B\n\\]\nSince each observation is either 0 or 1, the sample mean is just the sample proportion of sign-ups. That means \\(\\bar{X}_A = \\hat\\pi_A\\) and \\(\\bar{X}_B = \\hat\\pi_B\\), so the estimator is simply the observed difference in sign-up rates."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#simulating-data",
+    "href": "Blogs/project2/hw1_questions_ans.html#simulating-data",
+    "title": "A/B Testing a Call to Action",
+    "section": "Simulating Data",
+    "text": "Simulating Data\nIn a real experiment I would not know the true values of \\(\\pi_A\\) and \\(\\pi_B\\). For this exercise, however, I set them myself so I can study how the estimator behaves when the truth is known. I assume \\(\\pi_A = 0.22\\) and \\(\\pi_B = 0.18\\), so the true difference is \\(\\theta = 0.04\\).\nThe code below simulates 1,000 visitors in each group.\n\n\n\n\n\n\n\n\n\nGroup\nEstimate\n\n\n\n\n0\nCTA A\n0.216\n\n\n1\nCTA B\n0.178\n\n\n2\nDifference (A - B)\n0.038\n\n\n\n\n\n\n\nIn this simulation, the observed sign-up rate is 0.216 for CTA A and 0.178 for CTA B, producing an estimated difference of 0.038. That estimate is close to the true difference of 0.04, which is exactly what I would hope to see in a reasonably large sample."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#the-law-of-large-numbers",
+    "href": "Blogs/project2/hw1_questions_ans.html#the-law-of-large-numbers",
+    "title": "A/B Testing a Call to Action",
+    "section": "The Law of Large Numbers",
+    "text": "The Law of Large Numbers\nThe Law of Large Numbers says that as the sample gets bigger, the sample average gets closer to the true population average. Here, that matters because my estimator, \\(\\hat\\theta = \\bar{X}_A - \\bar{X}_B\\), is based on sample averages. So as I observe more visitors, I expect the estimated difference in sign-up rates to settle closer to the true difference of 0.04. To show this, I calculate the difference between the outcomes in groups A and B for each observation, then track the cumulative average of those differences over time.\n\n\n\n\n\n\n\n\n\nAt the start of the plot, the cumulative average moves around quite a bit because each new observation has a large effect. As the sample grows, the estimate settles down and moves toward the true value of 0.04. The main takeaway is that larger samples reduce noise and make the observed difference in sign-up rates more reliable."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#bootstrap-standard-errors",
+    "href": "Blogs/project2/hw1_questions_ans.html#bootstrap-standard-errors",
+    "title": "A/B Testing a Call to Action",
+    "section": "Bootstrap Standard Errors",
+    "text": "Bootstrap Standard Errors\nA point estimate by itself is not enough. I also want to know how precise that estimate is. The bootstrap is a resampling method that estimates the variability of a statistic without relying entirely on a closed-form formula. The basic idea is to resample with replacement from the observed data many times, recompute the statistic on each resample, and use the standard deviation of those resampled statistics as the estimated standard error.\n\n\n\n\n\n\n\n\n\nQuantity\nValue\n\n\n\n\n0\nBootstrap SE\n0.0177\n\n\n1\nAnalytical SE\n0.0178\n\n\n2\n95% CI Lower\n0.0034\n\n\n3\n95% CI Upper\n0.0726\n\n\n\n\n\n\n\nThe bootstrap standard error is 0.0177, while the analytical standard error is 0.0178. Those two values are almost identical, which is reassuring. It suggests that both the resampling approach and the Bernoulli standard-error formula are capturing the same underlying variability.\nUsing the bootstrap standard error, the approximate 95% confidence interval for \\(\\theta\\) is [0.0034, 0.0726]. Because the interval is entirely above zero, the simulated data suggest that CTA A performs better than CTA B."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#the-central-limit-theorem",
+    "href": "Blogs/project2/hw1_questions_ans.html#the-central-limit-theorem",
+    "title": "A/B Testing a Call to Action",
+    "section": "The Central Limit Theorem",
+    "text": "The Central Limit Theorem\nThe Central Limit Theorem says that even when the underlying data are not Normally distributed, the sampling distribution of the sample mean becomes approximately Normal as the sample size grows. Since my estimator is the difference of two sample means, the same idea applies here. This is what makes large-sample inference possible even though the raw data are only 0s and 1s.\nTo illustrate this, I simulate the sampling distribution of \\(\\hat\\theta\\) for four different sample sizes: \\(n \\in \\{25, 50, 100, 500\\}\\).\n\n\n\n\n\n\n\n\n\nAt the smaller sample sizes, the histograms are rougher and less symmetric. As the sample size increases, the distribution becomes smoother and more bell-shaped. That is the CLT in action: the estimator becomes approximately Normal even though the underlying outcomes are Bernoulli."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#hypothesis-testing",
+    "href": "Blogs/project2/hw1_questions_ans.html#hypothesis-testing",
+    "title": "A/B Testing a Call to Action",
+    "section": "Hypothesis Testing",
+    "text": "Hypothesis Testing\nA hypothesis test asks whether the observed data are sufficiently inconsistent with a null hypothesis that I am willing to reject it. In this case the natural null hypothesis is\n\\[\nH_0: \\theta = 0\n\\]\nwhich says the two CTAs have the same true sign-up rate. The alternative is\n\\[\nH_1: \\theta \\neq 0\n\\]\nwhich says the sign-up rates differ.\nBecause the CLT tells me that \\(\\hat\\theta\\) is approximately Normally distributed for large samples, I can standardize it to form a test statistic:\n\\[\nz = \\frac{\\hat\\theta - 0}{SE(\\hat\\theta)}\n\\]\nUnder the null, this statistic is approximately standard Normal. That gives me a reference distribution for computing a p-value.\nThis is often casually called a “t-test,” but that label is not exact here. The classical t-test comes from Normally distributed data with an estimated variance, which produces a true t-distribution. My data are Bernoulli rather than Normal, so there is no exact t result. What I am really doing is a large-sample z-test justified by the CLT. In practice, with a sample this large, the distinction is minor.\n\n\n\n\n\n\n\n\n\nQuantity\nValue\n\n\n\n\n0\nz statistic\n2.1388\n\n\n1\np-value\n0.0325\n\n\n\n\n\n\n\nThe test statistic is 2.1388 and the two-sided p-value is 0.0325. Since the p-value is below 0.05, I reject the null hypothesis of equal sign-up rates. In this simulated example, the data provide evidence that the two CTAs do not perform the same, and the positive estimate indicates that CTA A is better."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#the-t-test-as-a-regression",
+    "href": "Blogs/project2/hw1_questions_ans.html#the-t-test-as-a-regression",
+    "title": "A/B Testing a Call to Action",
+    "section": "The T-Test as a Regression",
+    "text": "The T-Test as a Regression\nThe same two-sample comparison can be written as a regression problem. I stack the two groups into one dataset and define an indicator variable \\(D_i\\) that equals 1 if the visitor saw CTA A and 0 if the visitor saw CTA B. I then fit the model\n\\[\nY_i = \\beta_0 + \\beta_1 D_i + \\varepsilon_i\n\\]\nwhere \\(Y_i\\) is 1 if the visitor signed up and 0 otherwise.\nThis regression has a straightforward interpretation. When \\(D_i = 0\\), the expected value of \\(Y_i\\) is \\(\\beta_0\\), so \\(\\beta_0\\) is the mean of Group B and estimates \\(\\pi_B\\). When \\(D_i = 1\\), the expected value is \\(\\beta_0 + \\beta_1\\), so that quantity estimates \\(\\pi_A\\). Therefore \\(\\beta_1 = \\pi_A - \\pi_B = \\theta\\), and the coefficient on the treatment indicator is exactly the difference in means.\n\n\n\n\n\n\n\n\n\nQuantity\nValue\n\n\n\n\n0\nIntercept (beta_0)\n0.1780\n\n\n1\nTreatment effect (beta_1)\n0.0380\n\n\n2\nSE(beta_1)\n0.0178\n\n\n3\nt statistic\n2.1377\n\n\n4\np-value\n0.0325\n\n\n\n\n\n\n\nThe regression coefficient on the treatment indicator is 0.0380, exactly the same as the difference in means computed earlier. The regression standard error is 0.0178, the t-statistic is 2.1377, and the p-value is 0.0327. These results line up almost perfectly with the earlier hypothesis test.\nThis equivalence matters because regression provides a much more flexible framework. In the simple two-group case it reproduces the same answer, but it also makes it easy to add controls, interaction terms, or multiple treatment arms without changing the general logic of the analysis."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#the-problem-with-peeking",
+    "href": "Blogs/project2/hw1_questions_ans.html#the-problem-with-peeking",
+    "title": "A/B Testing a Call to Action",
+    "section": "The Problem with Peeking",
+    "text": "The Problem with Peeking\nSuppose my boss is impatient and wants to check the results after every 100 visitors per group rather than waiting until the full sample of 1,000 visitors per group has arrived. That means testing at \\(n = 100, 200, \\ldots, 1000\\) and stopping early if any p-value is below 0.05.\nThis is a problem under classical frequentist inference. A single test at the 5% level has a 5% false positive rate only when the testing plan is fixed in advance. Repeatedly checking the data creates multiple chances to reject the null just by luck. Even if the null is true, the probability that at least one of those repeated peeks looks significant can be much larger than 5%.\nTo demonstrate this, I simulate a world where the null is actually true: \\(\\pi_A = \\pi_B = 0.20\\).\n\n\n\n\n\n\n\n\n\nQuantity\nValue\n\n\n\n\n0\nNominal false positive rate\n0.050\n\n\n1\nEmpirical false positive rate with peeking\n0.199\n\n\n\n\n\n\n\nThe empirical false positive rate is 0.199, which is far above the nominal 0.05 level of a single fixed-horizon test. In other words, repeated peeking nearly quadruples the false positive rate in this simulation. The practical implication is simple: if a team repeatedly checks p-values during an A/B test and stops the first time it sees significance, it will declare too many fake winners."
+  },
+  {
+    "objectID": "Blogs/project2/hw1_questions_ans.html#conclusion",
+    "href": "Blogs/project2/hw1_questions_ans.html#conclusion",
+    "title": "A/B Testing a Call to Action",
+    "section": "Conclusion",
+    "text": "Conclusion\nThis exercise used a simple A/B testing example to illustrate several foundational ideas from frequentist statistics. The Law of Large Numbers explained why the estimator becomes more stable as the sample grows. The bootstrap provided a practical way to quantify uncertainty. The Central Limit Theorem justified approximate Normal inference for the difference in sign-up rates, which then supported confidence intervals and hypothesis testing. I also showed that the same two-sample comparison can be written as a regression, linking experimental design to a broader modeling framework.\nThe final section highlighted an important operational lesson. Correct formulas are not enough by themselves; valid inference also depends on disciplined experimental design. In A/B testing, that means not only randomizing treatment assignment, but also committing to a sensible stopping rule instead of repeatedly peeking at the data until something looks significant."
+  },
+  {
+    "objectID": "Blogs/project1/index.html",
+    "href": "Blogs/project1/index.html",
+    "title": "Analysis of Cars",
+    "section": "",
+    "text": "Let’s investigate the relationship between fuel efficiency (mpg) and engine displacement (disp) from the mtcars dataset. Those variables have a correlation of r cor(mtcars$mpg, mtcars$disp) |&gt; format(digits=2).\n\n\nHere is a plot:\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\nmtcars = pd.read_csv(\"https://raw.githubusercontent.com/plotly/datasets/master/mtcars.csv\")\n\nplt.scatter(mtcars[\"mpg\"], mtcars[\"disp\"], c=\"dodgerblue\", s=30)\nplt.xlabel(\"mpg\")\nplt.ylabel(\"disp\")\nplt.show()"
+  },
+  {
+    "objectID": "Blogs/project1/index.html#sub-header",
+    "href": "Blogs/project1/index.html#sub-header",
+    "title": "Analysis of Cars",
+    "section": "",
+    "text": "Here is a plot:\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\nmtcars = pd.read_csv(\"https://raw.githubusercontent.com/plotly/datasets/master/mtcars.csv\")\n\nplt.scatter(mtcars[\"mpg\"], mtcars[\"disp\"], c=\"dodgerblue\", s=30)\nplt.xlabel(\"mpg\")\nplt.ylabel(\"disp\")\nplt.show()"
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "My Resume",
+    "section": "",
+    "text": "Download PDF file."
   },
   {
     "objectID": "about.html",

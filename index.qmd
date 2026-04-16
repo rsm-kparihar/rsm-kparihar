@@ -1,17 +1,67 @@
 ---
-title: "Khyati Parihar"
-image: "IMG_8623_SnapseedCopy_SnapseedCopy 2.jpg"
-about:
-  template: jolla
-  links:
-    - icon: envelope
-      href: mailto:kparihar@ucsd.edu
-    - icon: linkedin
-      href: https://www.linkedin.com/in/khyati-parihar-961283174/
-    - icon: github
-      href: https://github.com/rsm-kparihar
+title: ""
+page-layout: full
+format:
+  html:
+    css: styles.css
+    toc: false
 ---
 
-Welcome to my website!
+<div class="hero">
+<div class="hero-card">
+<img src="profile.jpg" class="profile-image" alt="Khyati Parihar">
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+<p class="tag">Data • Analytics • Gen AI</p>
+
+<h1>Khyati Parihar</h1>
+
+<p class="subtitle">
+I build clear, thoughtful work around data, experimentation, and analysis.
+</p>
+
+<div class="hero-buttons">
+<a href="resume.html" class="btn-primary">View Resume</a>
+<a href="blogs.html" class="btn-secondary">Read Blogs</a>
+<a href="https://www.linkedin.com/in/khyati-parihar-961283174/" class="btn-secondary" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+<a href="https://github.com/rsm-kparihar" class="btn-secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
+</div>
+</div>
+</div>
+
+## About Me
+
+<div class="info-grid">
+<div class="info-card">
+<h3>What I Did</h3>
+<p>My work has included developing ML-driven pipelines, working with data-intensive systems, and exploring how large language models can support automation, insight generation, and better decision-making.</p>
+</div>
+
+<div class="info-card">
+<h3>What I Do</h3>
+<p>I build machine learning and GenAI solutions that turn unstructured data into usable systems, with a focus on practical deployment, experimentation, and measurable impact.</p>
+</div>
+
+<div class="info-card">
+<h3>What I Want To Do</h3>
+<p>I am especially interested in GenAI, LLM applications, retrieval systems, and production-grade ML engineering that connects model capability with real-world usability.</p>
+</div>
+</div>
+
+## Featured Sections
+
+<div class="feature-row">
+  <a href="resume.html" class="feature-card">
+<h3>Resume</h3>
+<p>See my background, skills, and experience.</p>
+  </a>
+
+  <a href="blogs.html" class="feature-card">
+<h3>Blogs</h3>
+<p>Read short pieces on analysis, statistics, and data thinking.</p>
+  </a>
+
+  <a href="mailto:khyatiparihar@gmail.com" class="feature-card">
+<h3>Let's chat!</h3>
+<p>khyatiparihar@gmail.com</p>
+  </a>
+</div>

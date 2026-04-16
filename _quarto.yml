@@ -3,21 +3,18 @@ project:
   output-dir: docs
 
 website:
-  title: "Khyati's Website"
+  title: "Khyati’s Website"
   navbar:
     left:
       - href: index.qmd
         text: About
       - href: resume.qmd
         text: Resume
-      - href: blogs.qmd  # <-- add this
+      - href: blogs.qmd
         text: Blogs
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-      - minty
+    theme: cosmo
     css: styles.css
-    toc: true
+    smooth-scroll: true

@@ -26,15 +26,15 @@ def normal_cdf(x):
 
 ## Introduction
 
-Suppose I run a website with a landing page that invites visitors to sign up for a newsletter. I want to know which version of the call to action leads to more sign-ups. CTA A says **"Sign up for our newsletter here!"** and CTA B says **"Stay up to date by signing up!"**. Because even small wording changes can affect behavior, this is a natural setting for an A/B test.
+People who visit my website see a landing page with a prompt to join my newsletter. I want to know which version of that prompt gets more people to sign up. One says **“Sign up for our newsletter here!”** and the other says **“Stay up to date by signing up!”**. Even though the two messages are similar, little wording changes like this can influence what people do, so it makes sense to test them.
 
-In an A/B test, visitors are randomly assigned to one of two versions of the same page. One group sees CTA A and the other sees CTA B. I then compare the sign-up rates across the two groups. Since the assignment is random, any systematic difference in sign-up behavior can be attributed to the wording of the CTA rather than to pre-existing differences between visitors.
+To do that, I run an A/B test where visitors are randomly split into two groups. One group sees CTA A, and the other sees CTA B. Then I compare the sign-up rates between the two groups. Since the visitors are assigned randomly, any meaningful difference in results can be treated as the effect of the wording itself.
 
 ## The A/B Test as a Statistical Problem
 
-Each visitor either signs up or does not, so I model each outcome as a Bernoulli random variable. Let $\pi$ denote the probability that a visitor signs up. Because the CTA may influence behavior, I allow this probability to differ across groups: visitors who see CTA A have sign-up probability $\pi_A$, while visitors who see CTA B have sign-up probability $\pi_B$.
+Each visitor has two possible outcomes: they either sign up for the newsletter or they do not. Because of that, I can think of each visit as a simple yes-or-no outcome. In statistics, this kind of outcome is often modeled with a Bernoulli random variable. I use $\pi$ to represent the probability that a visitor signs up. Since the wording of the CTA might affect that decision, I allow the sign-up probability to be different for each group. Visitors who see CTA A have a sign-up probability of $\pi_A$, while those who see CTA B have a sign-up probability of $\pi_B$.
 
-The parameter I care about is the treatment effect,
+The main thing I want to measure is the treatment effect,
 
 $$
 \theta = \pi_A - \pi_B
@@ -80,9 +80,8 @@ In this simulation, the observed sign-up rate is 0.216 for CTA A and 0.178 for C
 
 ## The Law of Large Numbers
 
-The Law of Large Numbers says that as the sample size grows, the sample mean converges to the population mean. In this setting, that matters because my estimator $\hat\theta = \bar{X}_A - \bar{X}_B$ is built from sample means. As I observe more visitors, I should expect the estimated difference in sign-up rates to stabilize around the true difference of 0.04.
-
-To show this, I compute the element-wise differences between the simulated A and B outcomes and then calculate the cumulative average of those differences.
+The Law of Large Numbers says that as the sample gets bigger, the sample average gets closer to the true population average. Here, that matters because my estimator, $\hat\theta = \bar{X}_A - \bar{X}_B$, is based on sample averages. So as I observe more visitors, I expect the estimated difference in sign-up rates to settle closer to the true difference of 0.04.
+To show this, I calculate the difference between the outcomes in groups A and B for each observation, then track the cumulative average of those differences over time.
 
 ```{python}
 diffs = A - B

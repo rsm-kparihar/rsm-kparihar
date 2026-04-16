@@ -4,35 +4,35 @@
     "href": "blogs.html",
     "title": "My Blogs",
     "section": "",
-    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\n\n\n\nApr 14, 2026\n\n\n\n\n\n\n\n\n\n\n\nAnalysis of Cars\n\n\n\n\n\n\nKhyati Parihar\n\n\nApr 14, 2026\n\n\n\n\n\n\nNo matching items"
+    "text": "A/B Testing a Call to Action\n\n\n\n\n\n\n\n\n\nApr 15, 2026\n\n\n\n\n\n\n\n\n\n\n\nAnalysis of Cars\n\n\n\n\n\n\nKhyati Parihar\n\n\nApr 15, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Khyati Parihar",
+    "title": "\nKhyati Parihar\n",
     "section": "",
-    "text": "Welcome to my website!\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "Data • Analytics • Gen AI\n\n\n\nI build clear, thoughtful work around data, experimentation, and analysis.\n\n\nView Resume Read Blogs LinkedIn GitHub"
   },
   {
     "objectID": "Blogs/project2/hw1_questions_ans.html",
     "href": "Blogs/project2/hw1_questions_ans.html",
     "title": "A/B Testing a Call to Action",
     "section": "",
-    "text": "Suppose I run a website with a landing page that invites visitors to sign up for a newsletter. I want to know which version of the call to action leads to more sign-ups. CTA A says “Sign up for our newsletter here!” and CTA B says “Stay up to date by signing up!”. Because even small wording changes can affect behavior, this is a natural setting for an A/B test.\nIn an A/B test, visitors are randomly assigned to one of two versions of the same page. One group sees CTA A and the other sees CTA B. I then compare the sign-up rates across the two groups. Since the assignment is random, any systematic difference in sign-up behavior can be attributed to the wording of the CTA rather than to pre-existing differences between visitors."
+    "text": "People who visit my website see a landing page with a prompt to join my newsletter. I want to know which version of that prompt gets more people to sign up. One says “Sign up for our newsletter here!” and the other says “Stay up to date by signing up!”. Even though the two messages are similar, little wording changes like this can influence what people do, so it makes sense to test them.\nTo do that, I run an A/B test where visitors are randomly split into two groups. One group sees CTA A, and the other sees CTA B. Then I compare the sign-up rates between the two groups. Since the visitors are assigned randomly, any meaningful difference in results can be treated as the effect of the wording itself."
   },
   {
     "objectID": "Blogs/project2/hw1_questions_ans.html#introduction",
     "href": "Blogs/project2/hw1_questions_ans.html#introduction",
     "title": "A/B Testing a Call to Action",
     "section": "",
-    "text": "Suppose I run a website with a landing page that invites visitors to sign up for a newsletter. I want to know which version of the call to action leads to more sign-ups. CTA A says “Sign up for our newsletter here!” and CTA B says “Stay up to date by signing up!”. Because even small wording changes can affect behavior, this is a natural setting for an A/B test.\nIn an A/B test, visitors are randomly assigned to one of two versions of the same page. One group sees CTA A and the other sees CTA B. I then compare the sign-up rates across the two groups. Since the assignment is random, any systematic difference in sign-up behavior can be attributed to the wording of the CTA rather than to pre-existing differences between visitors."
+    "text": "People who visit my website see a landing page with a prompt to join my newsletter. I want to know which version of that prompt gets more people to sign up. One says “Sign up for our newsletter here!” and the other says “Stay up to date by signing up!”. Even though the two messages are similar, little wording changes like this can influence what people do, so it makes sense to test them.\nTo do that, I run an A/B test where visitors are randomly split into two groups. One group sees CTA A, and the other sees CTA B. Then I compare the sign-up rates between the two groups. Since the visitors are assigned randomly, any meaningful difference in results can be treated as the effect of the wording itself."
   },
   {
     "objectID": "Blogs/project2/hw1_questions_ans.html#the-ab-test-as-a-statistical-problem",
     "href": "Blogs/project2/hw1_questions_ans.html#the-ab-test-as-a-statistical-problem",
     "title": "A/B Testing a Call to Action",
     "section": "The A/B Test as a Statistical Problem",
-    "text": "The A/B Test as a Statistical Problem\nEach visitor either signs up or does not, so I model each outcome as a Bernoulli random variable. Let \\(\\pi\\) denote the probability that a visitor signs up. Because the CTA may influence behavior, I allow this probability to differ across groups: visitors who see CTA A have sign-up probability \\(\\pi_A\\), while visitors who see CTA B have sign-up probability \\(\\pi_B\\).\nThe parameter I care about is the treatment effect,\n\\[\n\\theta = \\pi_A - \\pi_B\n\\]\nwhich is the difference in true sign-up rates between the two CTAs. A positive value means CTA A performs better, while a negative value means CTA B performs better.\nI estimate this quantity with the difference in sample means,\n\\[\n\\hat\\theta = \\bar{X}_A - \\bar{X}_B\n\\]\nSince each observation is either 0 or 1, the sample mean is just the sample proportion of sign-ups. That means \\(\\bar{X}_A = \\hat\\pi_A\\) and \\(\\bar{X}_B = \\hat\\pi_B\\), so the estimator is simply the observed difference in sign-up rates."
+    "text": "The A/B Test as a Statistical Problem\nEach visitor has two possible outcomes: they either sign up for the newsletter or they do not. Because of that, I can think of each visit as a simple yes-or-no outcome. In statistics, this kind of outcome is often modeled with a Bernoulli random variable. I use \\(\\pi\\) to represent the probability that a visitor signs up. Since the wording of the CTA might affect that decision, I allow the sign-up probability to be different for each group. Visitors who see CTA A have a sign-up probability of \\(\\pi_A\\), while those who see CTA B have a sign-up probability of \\(\\pi_B\\).\nThe main thing I want to measure is the treatment effect,\n\\[\n\\theta = \\pi_A - \\pi_B\n\\]\nwhich is the difference in true sign-up rates between the two CTAs. A positive value means CTA A performs better, while a negative value means CTA B performs better.\nI estimate this quantity with the difference in sample means,\n\\[\n\\hat\\theta = \\bar{X}_A - \\bar{X}_B\n\\]\nSince each observation is either 0 or 1, the sample mean is just the sample proportion of sign-ups. That means \\(\\bar{X}_A = \\hat\\pi_A\\) and \\(\\bar{X}_B = \\hat\\pi_B\\), so the estimator is simply the observed difference in sign-up rates."
   },
   {
     "objectID": "Blogs/project2/hw1_questions_ans.html#simulating-data",
@@ -46,7 +46,7 @@
     "href": "Blogs/project2/hw1_questions_ans.html#the-law-of-large-numbers",
     "title": "A/B Testing a Call to Action",
     "section": "The Law of Large Numbers",
-    "text": "The Law of Large Numbers\nThe Law of Large Numbers says that as the sample size grows, the sample mean converges to the population mean. In this setting, that matters because my estimator \\(\\hat\\theta = \\bar{X}_A - \\bar{X}_B\\) is built from sample means. As I observe more visitors, I should expect the estimated difference in sign-up rates to stabilize around the true difference of 0.04.\nTo show this, I compute the element-wise differences between the simulated A and B outcomes and then calculate the cumulative average of those differences.\n\n\n\n\n\n\n\n\n\nAt the start of the plot, the cumulative average moves around quite a bit because each new observation has a large effect. As the sample grows, the estimate settles down and moves toward the true value of 0.04. The main takeaway is that larger samples reduce noise and make the observed difference in sign-up rates more reliable."
+    "text": "The Law of Large Numbers\nThe Law of Large Numbers says that as the sample gets bigger, the sample average gets closer to the true population average. Here, that matters because my estimator, \\(\\hat\\theta = \\bar{X}_A - \\bar{X}_B\\), is based on sample averages. So as I observe more visitors, I expect the estimated difference in sign-up rates to settle closer to the true difference of 0.04. To show this, I calculate the difference between the outcomes in groups A and B for each observation, then track the cumulative average of those differences over time.\n\n\n\n\n\n\n\n\n\nAt the start of the plot, the cumulative average moves around quite a bit because each new observation has a large effect. As the sample grows, the estimate settles down and moves toward the true value of 0.04. The main takeaway is that larger samples reduce noise and make the observed difference in sign-up rates more reliable."
   },
   {
     "objectID": "Blogs/project2/hw1_questions_ans.html#bootstrap-standard-errors",
@@ -117,5 +117,40 @@
     "title": "About",
     "section": "",
     "text": "About this site"
+  },
+  {
+    "objectID": "index.html#hi-im-khyati",
+    "href": "index.html#hi-im-khyati",
+    "title": "About Me",
+    "section": "",
+    "text": "I’m currently pursuing my M.S. in Business Analytics at UC San Diego, with a strong interest in data, AI, and Generative AI. Before this, I worked at Netomi, where I built and improved AI systems using models like Llama and GPT-4 for real-world customer conversations. :contentReferenceoaicite:0\nI enjoy using data to solve practical problems and I’m especially interested in analytics, experimentation, and building smarter AI systems. This website is where I share some of my projects, blogs, and work."
+  },
+  {
+    "objectID": "index.html#what-im-working-on",
+    "href": "index.html#what-im-working-on",
+    "title": "About Me",
+    "section": "What I’m Working On",
+    "text": "What I’m Working On\nRight now, I’m focused on building my skills in: - Marketing analytics - A/B testing - Data visualization - SQL and Python - Quarto website design"
+  },
+  {
+    "objectID": "index.html#about-this-site",
+    "href": "index.html#about-this-site",
+    "title": "About Me",
+    "section": "About This Site",
+    "text": "About This Site\nThis site includes my resume, blog posts, and selected class projects. My goal is to use it as a portfolio that shows both my technical skills and the way I think through problems.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "index.html#about-me",
+    "href": "index.html#about-me",
+    "title": "\nKhyati Parihar\n",
+    "section": "About Me",
+    "text": "About Me\n\n\n\nWhat I Did\n\n\nMy work has included developing ML-driven pipelines, working with data-intensive systems, and exploring how large language models can support automation, insight generation, and better decision-making.\n\n\n\n\nWhat I Do\n\n\nI build machine learning and GenAI solutions that turn unstructured data into usable systems, with a focus on practical deployment, experimentation, and measurable impact.\n\n\n\n\nWhat I Want To Do\n\n\nI am especially interested in GenAI, LLM applications, retrieval systems, and production-grade ML engineering that connects model capability with real-world usability."
+  },
+  {
+    "objectID": "index.html#featured-sections",
+    "href": "index.html#featured-sections",
+    "title": "\nKhyati Parihar\n",
+    "section": "Featured Sections",
+    "text": "Featured Sections\n\n\n\nResume\n\n\nSee my background, skills, and experience.\n\n\n\n\nBlogs\n\n\nRead short pieces on analysis, statistics, and data thinking.\n\n\n\n\nLet’s chat!\n\n\nkhyatiparihar@gmail.com"
   }
 ]
