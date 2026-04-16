@@ -17,7 +17,7 @@ format:
 <h1>Khyati Parihar</h1>
 
 <p class="subtitle">
-I build clear, thoughtful work around data, experimentation, and analysis.
+I build GenAI with curiosity, rigor, and very little patience for fluff.
 </p>
 
 <div class="hero-buttons">
