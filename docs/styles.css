@@ -303,3 +303,24 @@ body.home-page .info-card:nth-child(2) {
 body.home-page .info-card:nth-child(3) {
   border-top: 4px solid #c9b7c0;
 }
+
+body.home-page .btn-icon {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: var(--accent-dark);
+  border: 1px solid #d9dbe1;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: all 0.22s ease;
+}
+
+body.home-page .btn-icon:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
