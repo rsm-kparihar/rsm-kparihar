@@ -1,5 +1,6 @@
 ---
 title: "My Blogs"
+body-classes: blog-page
 listing:
   contents: Blogs  # <-- the sub-directory with blog content
   type: grid          # <-- my preferred layout type
