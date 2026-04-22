@@ -212,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="data-and-setup">Data and Setup</h3>
 <p>I use the <code>njmin</code> replication data and follow the variable construction in the authors’ original SAS replication file. The key outcome is full-time-equivalent employment, defined as the number of full-time workers plus managers plus one-half of part-time workers. This matches the measure used in the paper and allows a direct comparison with the published tables.</p>
 <p>My replication focuses on two parts of the paper: 1. the descriptive before-and-after employment comparisons in Table 3 2. the reduced-form regression in Table 4, column (i)</p>
-<div id="08c2cb1e" class="cell" data-execution_count="1">
+<div id="da1a2f6a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
@@ -256,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="replicating-the-descriptive-results">Replicating the Descriptive Results</h3>
 <p>I first replicate the paper’s basic before-and-after employment comparison. This is useful because it checks whether the data were loaded correctly and whether the main treatment-control pattern appears in the raw averages before moving to regression analysis.</p>
 <p>Before the policy change, average full-time-equivalent employment was about 23.33 in Pennsylvania and 20.44 in New Jersey. After the policy change, average employment was about 21.17 in Pennsylvania and 21.03 in New Jersey. This implies a difference-in-differences estimate of about 2.75, which is extremely close to the published estimate of 2.76.</p>
-<div id="ed2ec13a" class="cell" data-execution_count="2">
+<div id="1af75154" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>table3_check <span class="op">=</span> df.groupby(<span class="st">"STATE_NAME"</span>)[[<span class="st">"EMPTOT"</span>, <span class="st">"EMPTOT2"</span>]].mean()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>table3_check[<span class="st">"change"</span>] <span class="op">=</span> table3_check[<span class="st">"EMPTOT2"</span>] <span class="op">-</span> table3_check[<span class="st">"EMPTOT"</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>table3_check.<span class="bu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -303,7 +303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="replicating-the-main-statistical-finding" class="level3">
 <h3 class="anchored" data-anchor-id="replicating-the-main-statistical-finding">Replicating the Main Statistical Finding</h3>
 <p>I next replicate Table 4, column (i), the reduced-form regression of the change in employment on a New Jersey indicator. I use the same sample restriction logic as the authors’ SAS file so that the regression sample matches the published one as closely as possible.</p>
-<div id="0b77f372" class="cell" data-execution_count="3">
+<div id="c4c051b2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>reg1 <span class="op">=</span> df[</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"DEMP"</span>].notna() <span class="op">&amp;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    (</span>
@@ -347,7 +347,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">Time:</th>
-<td>18:23:50</td>
+<td>18:32:33</td>
 <th data-quarto-table-cell-role="th">Log-Likelihood:</th>
 <td>-1281.6</td>
 </tr>
@@ -450,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="something-additional" class="level2">
 <h2 class="anchored" data-anchor-id="something-additional">Something Additional</h2>
 <p>As an additional step, I graph average fast-food employment before and after the policy change for New Jersey and Pennsylvania. While the paper emphasizes tables and regressions, this figure makes the result easier to interpret at a glance.</p>
-<div id="f2bb85e8" class="cell" data-execution_count="4">
+<div id="ccfbd1e9" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PA"</span>: [<span class="fl">23.33</span>, <span class="fl">21.17</span>],</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"NJ"</span>: [<span class="fl">20.44</span>, <span class="fl">21.03</span>]</span>

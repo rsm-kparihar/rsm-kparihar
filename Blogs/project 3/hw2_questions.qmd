@@ -4,7 +4,7 @@ subtitle: "Minimum Wages and Employment: A Case Study of the Fast-Food Industry 
 author: "Khyati Parihar"
 date: today
 format:
-    html:
+  html:
     toc: true
     toc-depth: 2
     code-fold: false
