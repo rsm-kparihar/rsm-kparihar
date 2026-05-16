@@ -45,7 +45,6 @@ plt.rcParams["grid.alpha"] = 0.2
 
 df = pd.read_csv("blueprinty.csv")
 df.head()
-
 df.info()
 ```
 
@@ -253,16 +252,7 @@ Y_i \sim \text{Poisson}(\lambda_i)
 \lambda_i = \exp(X_i' \beta)
 $$
 
-This specification lets each firm have its own expected patent count. The exponential link is important because X
-i
-′
-	​
-
-β can take any real value, but λ
-i
-	​
-
- must always be positive.
+This specification lets each firm have its own expected patent count. The exponential link is important because \(X_i' \beta\) can take any real value, but \(\lambda_i\) must always be positive.
 
 I include an intercept, age, age squared, region dummies, and the customer indicator. Age squared is included because the relationship between firm age and patent output is unlikely to be perfectly linear. One region dummy is omitted to avoid perfect collinearity with the intercept.
 
