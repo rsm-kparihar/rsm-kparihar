@@ -218,7 +218,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="simulating-data">Simulating Data</h2>
 <p>In a real experiment I would not know the true values of <span class="math inline">\(\pi_A\)</span> and <span class="math inline">\(\pi_B\)</span>. For this exercise, however, I set them myself so I can study how the estimator behaves when the truth is known. I assume <span class="math inline">\(\pi_A = 0.22\)</span> and <span class="math inline">\(\pi_B = 0.18\)</span>, so the true difference is <span class="math inline">\(\theta = 0.04\)</span>.</p>
 <p>The code below simulates 1,000 visitors in each group.</p>
-<div id="f77d2e65" class="cell" data-execution_count="2">
+<div id="62d30d8a" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
@@ -249,7 +249,7 @@ window.Quarto = {
 <section id="the-law-of-large-numbers" class="level2">
 <h2 class="anchored" data-anchor-id="the-law-of-large-numbers">The Law of Large Numbers</h2>
 <p>The Law of Large Numbers says that as the sample gets bigger, the sample average gets closer to the true population average. Here, that matters because my estimator, <span class="math inline">\(\hat\theta = \bar{X}_A - \bar{X}_B\)</span>, is based on sample averages. So as I observe more visitors, I expect the estimated difference in sign-up rates to settle closer to the true difference of 0.04. To show this, I calculate the difference between the outcomes in groups A and B for each observation, then track the cumulative average of those differences over time.</p>
-<div id="d1414737" class="cell" data-execution_count="3">
+<div id="e56315b9" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -263,7 +263,7 @@ window.Quarto = {
 <section id="bootstrap-standard-errors" class="level2">
 <h2 class="anchored" data-anchor-id="bootstrap-standard-errors">Bootstrap Standard Errors</h2>
 <p>A point estimate by itself is not enough. I also want to know how precise that estimate is. The bootstrap is a resampling method that estimates the variability of a statistic without relying entirely on a closed-form formula. The basic idea is to resample with replacement from the observed data many times, recompute the statistic on each resample, and use the standard deviation of those resampled statistics as the estimated standard error.</p>
-<div id="7255d370" class="cell" data-execution_count="4">
+<div id="72e5b6f4" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
@@ -307,7 +307,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="the-central-limit-theorem">The Central Limit Theorem</h2>
 <p>The Central Limit Theorem says that even when the underlying data are not Normally distributed, the sampling distribution of the sample mean becomes approximately Normal as the sample size grows. Since my estimator is the difference of two sample means, the same idea applies here. This is what makes large-sample inference possible even though the raw data are only 0s and 1s.</p>
 <p>To illustrate this, I simulate the sampling distribution of <span class="math inline">\(\hat\theta\)</span> for four different sample sizes: <span class="math inline">\(n \in \{25, 50, 100, 500\}\)</span>.</p>
-<div id="0107ef7c" class="cell" data-execution_count="5">
+<div id="29221f77" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -335,7 +335,7 @@ z = \frac{\hat\theta - 0}{SE(\hat\theta)}
 \]</span></p>
 <p>Under the null, this statistic is approximately standard Normal. That gives me a reference distribution for computing a p-value.</p>
 <p>This is often casually called a “t-test,” but that label is not exact here. The classical t-test comes from Normally distributed data with an estimated variance, which produces a true t-distribution. My data are Bernoulli rather than Normal, so there is no exact t result. What I am really doing is a large-sample z-test justified by the CLT. In practice, with a sample this large, the distinction is minor.</p>
-<div id="143b23bc" class="cell" data-execution_count="6">
+<div id="7612744e" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
@@ -370,7 +370,7 @@ Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i
 \]</span></p>
 <p>where <span class="math inline">\(Y_i\)</span> is 1 if the visitor signed up and 0 otherwise.</p>
 <p>This regression has a straightforward interpretation. When <span class="math inline">\(D_i = 0\)</span>, the expected value of <span class="math inline">\(Y_i\)</span> is <span class="math inline">\(\beta_0\)</span>, so <span class="math inline">\(\beta_0\)</span> is the mean of Group B and estimates <span class="math inline">\(\pi_B\)</span>. When <span class="math inline">\(D_i = 1\)</span>, the expected value is <span class="math inline">\(\beta_0 + \beta_1\)</span>, so that quantity estimates <span class="math inline">\(\pi_A\)</span>. Therefore <span class="math inline">\(\beta_1 = \pi_A - \pi_B = \theta\)</span>, and the coefficient on the treatment indicator is exactly the difference in means.</p>
-<div id="90cb7a64" class="cell" data-execution_count="7">
+<div id="0e5edd60" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
@@ -415,7 +415,7 @@ Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i
 <p>Suppose my boss is impatient and wants to check the results after every 100 visitors per group rather than waiting until the full sample of 1,000 visitors per group has arrived. That means testing at <span class="math inline">\(n = 100, 200, \ldots, 1000\)</span> and stopping early if any p-value is below 0.05.</p>
 <p>This is a problem under classical frequentist inference. A single test at the 5% level has a 5% false positive rate only when the testing plan is fixed in advance. Repeatedly checking the data creates multiple chances to reject the null just by luck. Even if the null is true, the probability that at least one of those repeated peeks looks significant can be much larger than 5%.</p>
 <p>To demonstrate this, I simulate a world where the null is actually true: <span class="math inline">\(\pi_A = \pi_B = 0.20\)</span>.</p>
-<div id="5ef0365e" class="cell" data-execution_count="8">
+<div id="bb6a5c71" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
