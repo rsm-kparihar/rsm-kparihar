@@ -1,0 +1,408 @@
+---
+title: "Conversational AI as a Marketing Engine"
+format:
+  revealjs:
+    theme: simple
+    transition: slide
+    slide-number: true
+    progress: true
+    fig-width: 7
+    fig-height: 4
+    title-slide: false
+    width: 1280
+    height: 720
+    margin: 0.08
+    font-size: 30px
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap');
+
+:root {
+  --pink: #e8437a;
+  --light-pink: #fce7ef;
+  --blue: #1a3a6b;
+  --sky: #4a90d9;
+  --pale-sky: #ddeeff;
+  --white: #ffffff;
+  --off-white: #f9f6f8;
+  --ink: #1a1a2e;
+  --muted: #6b7280;
+}
+
+.reveal {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  color: var(--ink);
+  background: var(--white);
+}
+
+.reveal h2 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--blue);
+  letter-spacing: -0.02em;
+  text-transform: none;
+  font-size: 1.8em;
+  margin-bottom: 0.4em;
+}
+
+.reveal .slides section {
+  text-align: left;
+  padding: 2rem 3rem;
+}
+
+.pink-pill {
+  display: inline-block;
+  background: var(--pink);
+  color: white;
+  border-radius: 999px;
+  padding: 0.2rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.card-row {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.9rem;
+}
+
+.card {
+  flex: 1;
+  background: var(--off-white);
+  border: 1.5px solid #e5e9f0;
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 4px 14px rgba(26,58,107,0.07);
+}
+
+.card.pink-card {
+  background: var(--light-pink);
+  border-color: #f2b8cc;
+}
+
+.card.blue-card {
+  background: var(--pale-sky);
+  border-color: #b8d4f2;
+}
+
+.card-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--pink);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.card strong {
+  display: block;
+  color: var(--blue);
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.card p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.step {
+  background: white;
+  border: 2px solid var(--sky);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.arrow {
+  color: var(--pink);
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.callout-box {
+  border-left: 5px solid var(--pink);
+  background: var(--light-pink);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+.callout-box strong {
+  color: var(--pink);
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--pale-sky);
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin: 0 0.25rem 0.25rem 0;
+  border: 1.5px solid #b8d4f2;
+}
+
+.pink-accent {
+  color: #ff7aaa;
+}
+
+.final-hero {
+  background: linear-gradient(135deg, #1a3a6b, #4a90d9);
+  border-radius: 18px;
+  padding: 1.8rem 2rem;
+  color: white;
+  text-align: center;
+  margin-top: 0.4rem;
+}
+
+.final-hero h3 {
+  color: white !important;
+  font-size: 1.5rem;
+  margin-top: 0;
+  line-height: 1.25;
+  font-family: 'DM Serif Display', serif;
+}
+
+.final-hero p {
+  color: rgba(255,255,255,0.85);
+  font-size: 0.88rem;
+  margin: 0.7rem 0 0 0;
+}
+</style>
+
+##  {background="linear-gradient(135deg, #1a3a6b 0%, #2d5fa8 60%, #4a90d9 100%)"}
+
+<div style="padding: 1rem 0;">
+<div class="pink-pill">Marketing × AI</div>
+
+<h2 style="color: white !important; font-size: 2.2rem; margin: 0.3rem 0 0.5rem 0; line-height: 1.2;">Conversational AI as a<br>Marketing Engine</h2>
+
+<p style="color:rgba(255,255,255,0.78); font-size:1rem; margin:0 0 0.8rem 0;">How support conversations become customer signals</p>
+
+<p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin:0;">Khyati Parihar &nbsp;·&nbsp; June 2026</p>
+</div>
+
+---
+
+## The gap no one talks about
+
+<div class="card-row">
+<div class="card pink-card">
+<div class="card-num">1</div>
+<strong>Customers move fast</strong>
+<p>They expect instant answers across chat, email, social, and apps — right now.</p>
+</div>
+<div class="card">
+<div class="card-num">2</div>
+<strong>Brands move slower</strong>
+<p>Teams operate in silos with limited shared customer context across departments.</p>
+</div>
+<div class="card blue-card">
+<div class="card-num">3</div>
+<strong>Support = brand memory</strong>
+<p>A slow or cold support experience becomes a lasting negative marketing impression.</p>
+</div>
+</div>
+
+<div class="callout-box">
+<strong>Core idea:</strong> Customer service is not separate from marketing — it is one of the most direct and underused brand touchpoints.
+</div>
+
+---
+
+## What conversational AI actually does
+
+<div class="flow">
+<div class="step">Customer asks</div>
+<div class="arrow">→</div>
+<div class="step">AI detects intent</div>
+<div class="arrow">→</div>
+<div class="step">Answer or action</div>
+<div class="arrow">→</div>
+<div class="step">Human handoff</div>
+</div>
+
+<div class="card-row">
+<div class="card">
+<strong>Not just replies</strong>
+<p>It understands the <em>reason</em> behind a message, not just the words.</p>
+</div>
+<div class="card pink-card">
+<strong>Not fully automated</strong>
+<p>Complex or emotional cases are routed to human agents who can show empathy.</p>
+</div>
+<div class="card blue-card">
+<strong>Not only support</strong>
+<p>Every conversation becomes a signal for marketing, retention, and product teams.</p>
+</div>
+</div>
+
+---
+
+## My Netomi lens
+
+> At Netomi, the key lesson was simple: **AI support works best when it feels invisible.**
+
+<div class="card-row" style="margin-top:1rem;">
+<div class="card blue-card">
+<strong>⚡ Fast</strong>
+<p>Resolve common questions instantly — no hold music, no wait times.</p>
+</div>
+<div class="card">
+<strong>🎯 Useful</strong>
+<p>Connect the conversation to the right workflow, knowledge base, or escalation path.</p>
+</div>
+<div class="card pink-card">
+<strong>🤝 Human-aware</strong>
+<p>Escalate gracefully when the customer needs empathy, judgment, or an exception.</p>
+</div>
+</div>
+
+---
+
+## From support tickets to marketing signals
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+
+signals = ["Purchase intent", "Churn risk", "Product confusion", "Retention moment", "Campaign feedback"]
+values = [88, 82, 76, 72, 66]
+pink = "#e8437a"
+blue = "#1a3a6b"
+sky = "#4a90d9"
+colors = [pink if v >= 80 else sky if v >= 74 else "#a8c8f0" for v in values]
+
+fig, ax = plt.subplots(figsize=(8, 3.8))
+fig.patch.set_facecolor("white")
+ax.set_facecolor("white")
+bars = ax.barh(signals, values, color=colors, height=0.55, zorder=3)
+ax.set_xlim(0, 105)
+ax.set_xlabel("Illustrative marketing value score", color=blue, fontsize=9)
+ax.set_title("What support conversations can reveal for marketing", color=blue, fontweight="bold", fontsize=11, pad=10)
+ax.invert_yaxis()
+ax.spines[["top", "right", "left"]].set_visible(False)
+ax.spines["bottom"].set_color("#e5e9f0")
+ax.grid(axis="x", alpha=0.2, zorder=0)
+ax.tick_params(axis="y", length=0, labelsize=9, colors=blue)
+ax.tick_params(axis="x", colors="#9ca3af", labelsize=8)
+for bar, val in zip(bars, values):
+    ax.text(val + 1.5, bar.get_y() + bar.get_height() / 2, str(val),
+            va="center", ha="left", fontsize=9, color=blue, fontweight="bold")
+plt.tight_layout()
+plt.show()
+```
+
+<p style="font-size:0.65rem; color:#9ca3af; margin-top:0.2rem;">Values are illustrative — relative marketing usefulness, not measured performance.</p>
+
+---
+
+## A simple customer journey
+
+```{python}
+import matplotlib.pyplot as plt
+import numpy as np
+
+stages = ["Question", "AI answer", "Action taken", "Human help", "Loyalty"]
+scores = [42, 62, 74, 84, 91]
+
+fig, ax = plt.subplots(figsize=(8, 3.8))
+fig.patch.set_facecolor("white")
+ax.set_facecolor("white")
+x = np.arange(len(stages))
+ax.plot(x, scores, marker="o", linewidth=3, color="#e8437a", markersize=9, zorder=4)
+ax.fill_between(x, scores, [35]*len(scores), color="#ddeeff", alpha=0.7, zorder=2)
+for xi, yi in zip(x, scores):
+    ax.text(xi, yi + 2.2, str(yi), ha="center", va="bottom", fontsize=9.5,
+            color="#1a3a6b", fontweight="bold")
+ax.set_xticks(x)
+ax.set_xticklabels(stages, fontsize=9, color="#1a3a6b")
+ax.set_ylim(30, 100)
+ax.set_ylabel("Illustrative experience score", color="#1a3a6b", fontsize=9)
+ax.set_title("Better conversations lift the customer experience across every stage",
+             color="#1a3a6b", fontweight="bold", fontsize=10.5, pad=10)
+ax.spines[["top", "right"]].set_visible(False)
+ax.spines[["left", "bottom"]].set_color("#e5e9f0")
+ax.grid(axis="y", alpha=0.18, zorder=0)
+ax.tick_params(axis="both", colors="#9ca3af")
+plt.tight_layout()
+plt.show()
+```
+
+<div class="flow" style="margin-top:0.5rem;">
+<div class="step">"Where is my order?"</div>
+<div class="arrow">→</div>
+<div class="step">Delivery update</div>
+<div class="arrow">→</div>
+<div class="step">Return option</div>
+<div class="arrow">→</div>
+<div class="step">Better trust</div>
+</div>
+
+---
+
+## Why marketers should care
+
+<div class="card-row">
+<div class="card pink-card">
+<strong>🎨 Personalization</strong>
+<p>Conversations reveal what the customer needs <em>right now</em> — not last quarter.</p>
+</div>
+<div class="card blue-card">
+<strong>🔁 Retention</strong>
+<p>Frustration signals surface before customers churn — giving teams time to act.</p>
+</div>
+</div>
+
+<div class="card-row" style="margin-top:0.7rem;">
+<div class="card">
+<strong>💡 Product insight</strong>
+<p>Repeated questions expose what is confusing, missing, or undercommunicated.</p>
+</div>
+<div class="card pink-card">
+<strong>🏷️ Brand trust</strong>
+<p>Fast, smooth support becomes part of the brand — not just a cost center.</p>
+</div>
+</div>
+
+---
+
+## Final takeaway
+
+<div class="final-hero">
+<h3>The best conversational AI <span class="pink-accent">doesn't feel like AI.</span></h3>
+<p>It feels fast, useful, and human. For marketing analytics, support conversations are a <strong>live signal layer</strong> for customer intent, loyalty, and growth.</p>
+</div>
+
+<br>
+
+<span class="tag">Conversational AI</span>
+<span class="tag">Customer Experience</span>
+<span class="tag">Marketing Analytics</span>
+<span class="tag">Netomi Lens</span>
