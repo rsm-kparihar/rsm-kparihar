@@ -177,7 +177,7 @@ execute:
 
 ## Conversational AI as a Marketing Engine {.hero}
 
-How support conversations become customer signals
+How support conversations become customer signals  
 <span class="tag">Conversational AI</span><span class="tag">Marketing Analytics</span><span class="tag">Netomi Lens</span>
 
 ---
@@ -278,7 +278,7 @@ At Netomi, the key lesson was simple: <strong>AI support works best when it feel
 
 ## Final takeaway {.hero}
 
-The best conversational AI does not feel like AI.
+The best conversational AI does not feel like AI.  
 It feels <strong>fast</strong>, <strong>useful</strong>, and <strong>human</strong>.
 
 <br>
