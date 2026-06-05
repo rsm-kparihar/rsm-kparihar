@@ -13,6 +13,7 @@ format:
     height: 720
     margin: 0.08
     font-size: 30px
+    embed-resources: true
 execute:
   echo: false
   warning: false
