@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Khyati Parihar">
-<meta name="dcterms.date" content="2026-06-04">
+<meta name="dcterms.date" content="2026-06-09">
 
 <title>MaxDiff Analysis of MSBA Class Preferences – Khyati’s Portfolio</title>
 <style>
@@ -222,7 +222,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 4, 2026</p>
+      <p class="date">June 9, 2026</p>
     </div>
   </div>
   
@@ -234,7 +234,7 @@ window.Quarto = {
 </header>
 
 
-<div id="7e119a46" class="cell" data-execution_count="1">
+<div id="2fa119b6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -333,7 +333,7 @@ blockquote {
 <h2 class="anchored" data-anchor-id="the-data">The Data</h2>
 <p>The main data file is <code>maxdiff_design_and_choices.csv</code>. Each row is one item shown to one respondent in one task. The key variables are respondent ID, task number, position on the screen, item number, and response. A response of <code>1</code> means the item was chosen as best, <code>-1</code> means it was chosen as worst, and <code>0</code> means it was shown but not selected.</p>
 <p>The raw file also contains later two-option rows involving item 11. Because this assignment is about the 10 MSBA class items and the 4-item MaxDiff screens, I filter the data to tasks with exactly four rows and item numbers 1 through 10.</p>
-<div id="8718156b" class="cell" data-execution_count="2">
+<div id="6aac7dc2" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> pd.read_csv(<span class="st">"maxdiff_design_and_choices.csv"</span>, encoding<span class="op">=</span><span class="st">"utf-8-sig"</span>)</span>
@@ -396,7 +396,7 @@ blockquote {
 </div>
 </div>
 <p>The filtered data contain 85 respondents, 8 four-item MaxDiff tasks per respondent, 4 items per task, and 10 class items.</p>
-<div id="4a6d2821" class="cell" data-execution_count="3">
+<div id="fa2a2866" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sanity <span class="op">=</span> (</span>
@@ -437,7 +437,7 @@ blockquote {
 </div>
 </div>
 <p>The sanity check passes: every retained MaxDiff task has exactly one best choice, one worst choice, and two unchosen alternatives.</p>
-<div id="a720903a" class="cell" data-execution_count="4">
+<div id="ba3a0246" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>shown <span class="op">=</span> (</span>
@@ -539,7 +539,7 @@ blockquote {
 \text{score}_j = \%\text{best}_j - \%\text{worst}_j
 \]</span></p>
 <p>A score near 1 means the class is almost always chosen as best when shown. A score near -1 means the class is almost always chosen as worst. A score near 0 means the class is either in the middle or has mixed reactions.</p>
-<div id="bb213494" class="cell" data-execution_count="5">
+<div id="c1732d19" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> (</span>
@@ -707,7 +707,7 @@ blockquote {
 </div>
 </div>
 </div>
-<div id="27460978" class="cell" data-execution_count="6">
+<div id="163efb0c" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>respondents <span class="op">=</span> data[<span class="st">"Record ID"</span>].unique()</span>
@@ -730,7 +730,7 @@ blockquote {
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> counts.merge(ci, on<span class="op">=</span><span class="st">"Item"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="2477d169" class="cell" data-execution_count="7">
+<div id="612b6554" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plot_counts <span class="op">=</span> counts.sort_values(<span class="st">"counts_score"</span>)</span>
@@ -774,7 +774,7 @@ P(\text{best}=b) = \frac{\exp(\beta_b)}{\exp(\beta_a)+\exp(\beta_b)+\exp(\beta_c
 P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{shown} \setminus \{b\}} \exp(-\beta_j)}.
 \]</span></p>
 <p>The MNL model estimates one utility coefficient <span class="math inline">\(\beta_j\)</span> for each class. Only differences in utility are identified, so I normalize item 1 to zero and estimate the other nine coefficients relative to item 1.</p>
-<div id="22bd6ba3" class="cell" data-execution_count="8">
+<div id="5f4a3e3a" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>task_rows <span class="op">=</span> []</span>
@@ -880,7 +880,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 \ell(\boldsymbol{\beta}) = \sum_{\text{tasks}} \left[\beta_{j_b^*} - \log \sum_{j \in \text{shown}} \exp(\beta_j) - \beta_{j_w^*} - \log \sum_{j \in \text{shown} \setminus \{j_b^*\}} \exp(-\beta_j)\right].
 \]</span></p>
 <p>Here <span class="math inline">\(j_b^*\)</span> is the chosen best item and <span class="math inline">\(j_w^*\)</span> is the chosen worst item. I maximize this likelihood using BFGS.</p>
-<div id="8c250be5" class="cell" data-execution_count="9">
+<div id="93a687aa" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> tasks[[<span class="st">"item_1"</span>, <span class="st">"item_2"</span>, <span class="st">"item_3"</span>, <span class="st">"item_4"</span>]].to_numpy() <span class="op">-</span> <span class="dv">1</span></span>
@@ -1030,7 +1030,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 </div>
 </div>
 </div>
-<div id="7304ff3a" class="cell" data-execution_count="10">
+<div id="c2238c42" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plot_mle <span class="op">=</span> mle.sort_values(<span class="st">"mle_share"</span>)</span>
@@ -1066,7 +1066,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 \pi(\boldsymbol{\beta} \mid \boldsymbol{y}) \propto L(\boldsymbol{\beta})\pi(\boldsymbol{\beta}).
 \]</span></p>
 <p>I estimate the posterior using a random-walk Metropolis-Hastings sampler. The chain starts at the MLE, runs for 20,000 iterations, and discards the first 25% as burn-in.</p>
-<div id="ed698fdb" class="cell" data-execution_count="11">
+<div id="e6ab0147" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_post(beta9):</span>
@@ -1104,7 +1104,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 </div>
 </div>
 <p>The final acceptance rate is shown above. It falls in the recommended range of roughly 25% to 40%, so the proposal step size is reasonable.</p>
-<div id="5692fc2b" class="cell" data-execution_count="12">
+<div id="7ed2ea4a" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>trace_names <span class="op">=</span> {<span class="dv">1</span>: <span class="st">"Item 2: SQL"</span>, <span class="dv">4</span>: <span class="st">"Item 5: Business Analytics"</span>, <span class="dv">8</span>: <span class="st">"Item 9: Marketing Analytics"</span>}</span>
@@ -1130,7 +1130,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 </div>
 </div>
 <p>The traces look stable after burn-in, with the chain fluctuating around a stationary region rather than drifting systematically. That is the basic diagnostic pattern I want to see from this sampler.</p>
-<div id="9c008ae7" class="cell" data-execution_count="13">
+<div id="d5875010" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>post_full <span class="op">=</span> np.column_stack([np.zeros(<span class="bu">len</span>(post)), post])</span>
@@ -1297,7 +1297,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 </div>
 </div>
 </div>
-<div id="16dcf523" class="cell" data-execution_count="14">
+<div id="44b642e2" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot_bayes <span class="op">=</span> bayes.sort_values(<span class="st">"post_share"</span>)</span>
@@ -1331,7 +1331,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 </section>
 <section id="comparing-the-three-methods" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-the-three-methods">Comparing the Three Methods</h2>
-<div id="964b0e1e" class="cell" data-execution_count="15">
+<div id="1eb42665" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>comparison <span class="op">=</span> (</span>
@@ -1478,7 +1478,7 @@ P(\text{worst}=c \mid \text{best}=b) = \frac{\exp(-\beta_c)}{\sum_{j \in \text{s
 </div>
 </div>
 </div>
-<div id="22ee1fcc" class="cell" data-execution_count="16">
+<div id="140bf700" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">18</span>, <span class="dv">7</span>))</span>
