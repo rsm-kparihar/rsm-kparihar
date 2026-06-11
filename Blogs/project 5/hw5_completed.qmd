@@ -2,22 +2,67 @@
 title: "Key Drivers Analysis"
 author: "Khyati Parihar"
 date: today
+categories: [Marketing Analytics, Key Drivers, Machine Learning]
 format:
   html:
     toc: true
-    code-fold: false
+    toc-depth: 2
+    code-fold: true
+    code-tools: true
+    df-print: paged
+    theme: cosmo
+execute:
+  warning: false
+  message: false
 ---
 
-## Overview
+<style>
+:root {
+  --pink-dark: #9d174d;
+  --pink-main: #db2777;
+  --pink-soft: #fce7f3;
+  --pink-light: #fdf2f8;
+}
 
-This analysis identifies the key drivers of customer satisfaction using:
+body {
+  background: linear-gradient(180deg, #fff7fb 0%, #ffffff 30%);
+}
 
-- Pearson correlations
-- Standardized regression coefficients
-- Drop-one (usefulness) analysis
-- Shapley value decomposition of R²
-- Johnson's Relative Weights
-- Random Forest Mean Decrease in Gini
+h1, h2, h3 {
+  color: var(--pink-dark);
+}
+
+a {
+  color: var(--pink-main);
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table thead th {
+  background-color: var(--pink-soft) !important;
+  color: var(--pink-dark) !important;
+  border-bottom: 2px solid var(--pink-main) !important;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: var(--pink-light);
+}
+
+.callout-note {
+  border-left-color: var(--pink-main) !important;
+}
+</style>
+
+## Objective
+
+This analysis identifies and quantifies the key drivers of customer satisfaction using the methods from the Week 9 Key Drivers lecture. The response variable is **customer satisfaction**, and the predictors are nine credit-card perception measures.
+
+The goal is to reproduce the structure of the key-drivers comparison table from the lecture and compare how different variable-importance methods rank the same attributes.
+
+## Setup
 
 ```{python}
 import pandas as pd
@@ -28,151 +73,191 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 
+pd.set_option("display.max_columns", None)
+
+pink_style = [
+    {"selector": "thead th", "props": [("background-color", "#fce7f3"), ("color", "#9d174d")]},
+    {"selector": "tbody tr:nth-child(even)", "props": [("background-color", "#fdf2f8")]},
+    {"selector": "td, th", "props": [("text-align", "center")]},
+    {"selector": "caption", "props": [("caption-side", "top"), ("font-weight", "bold"), ("color", "#9d174d")]}
+]
+
 df = pd.read_csv("data_for_drivers_analysis.csv")
 
-y = df["satisfaction"]
-X = df.drop(columns=["brand","id","satisfaction"])
+y_col = "satisfaction"
+id_cols = ["brand", "id"]
+x_cols = [c for c in df.columns if c not in id_cols + [y_col]]
 
-cols = X.columns.tolist()
+label_map = {
+    "trust": "Is offered by a brand I trust",
+    "build": "Helps build credit quickly",
+    "differs": "Is different from other cards",
+    "easy": "Is easy to use",
+    "appealing": "Has appealing benefits or rewards",
+    "rewarding": "Rewards me for responsible usage",
+    "popular": "Is used by a lot of people",
+    "service": "Provides outstanding customer service",
+    "impact": "Makes a difference in my life"
+}
+
+X = df[x_cols].copy()
+y = df[y_col].copy()
 ```
 
-## Pearson Correlations
+## Data Structure
 
 ```{python}
-pearson = X.apply(lambda s: s.corr(y))
-pearson.sort_values(ascending=False).to_frame("Pearson Correlation")
+summary = pd.DataFrame({
+    "Column": df.columns,
+    "Role": ["Ignore" if c in id_cols else "Outcome" if c == y_col else "Driver" for c in df.columns]
+})
+
+summary.style.set_table_styles(pink_style)
 ```
 
-## Standardized Regression Coefficients
+## Methods
+
+The analysis uses six variable-importance approaches. The lecture slide also shows polychoric correlations, but this Python version reports Pearson correlations because the provided assignment can be completed without a dedicated polychoric-correlation package:
+
+1. **Pearson correlations**: R² from a simple regression (correlation squared), normalized to sum to 100%.
+2. **Standardized regression coefficients**: absolute standardized multiple-regression coefficients, normalized to sum to 100%.
+3. **Drop-one usefulness**: decrease in full-model \(R^2\) after removing each driver, normalized to sum to 100%.
+4. **LMG / Shapley values**: each driver's average marginal contribution to \(R^2\) across all possible model-entry orders.
+5. **Johnson's relative weights**: a fast linear-regression approximation to Shapley values.
+6. **Random Forest importance**: impurity-based feature importance from a random forest model.
+
+## Calculations
 
 ```{python}
-Xs = StandardScaler().fit_transform(X)
-ys = (y - y.mean()) / y.std()
+def pct(s):
+    s = pd.Series(s, index=x_cols).astype(float)
+    total = s.sum()
+    if total == 0:
+        return s * np.nan
+    return 100 * s / total
 
-lm = LinearRegression()
-lm.fit(Xs, ys)
+# Pearson: R² from simple regression (Slide 64)
+pearson = pd.Series({c: X[c].corr(y)**2 for c in x_cols})
+pearson_pct = pct(pearson)
 
-betas = pd.Series(lm.coef_, index=cols)
-betas.sort_values(ascending=False).to_frame("Standardized Beta")
-```
+# Standardized regression coefficients: absolute standardized betas, normalized
+scaler_x = StandardScaler()
+scaler_y = StandardScaler()
+Xs = scaler_x.fit_transform(X)
+ys = scaler_y.fit_transform(y.to_numpy().reshape(-1, 1)).ravel()
 
-## Drop-One Analysis (Usefulness)
+lm_std = LinearRegression().fit(Xs, ys)
+std_beta = pd.Series(lm_std.coef_, index=x_cols)
+std_beta_pct = pct((std_beta.abs())**2)
 
-```{python}
-full_r2 = LinearRegression().fit(X, y).score(X, y)
+# Drop-one usefulness: full R2 minus R2 without each driver, normalized
+full_model = LinearRegression().fit(X, y)
+full_r2 = full_model.score(X, y)
 
 drop_one = {}
+for c in x_cols:
+    X_minus = X.drop(columns=[c])
+    r2_minus = LinearRegression().fit(X_minus, y).score(X_minus, y)
+    drop_one[c] = full_r2 - r2_minus
 
-for c in cols:
-    r2 = LinearRegression().fit(
-        X.drop(columns=[c]),
-        y
-    ).score(X.drop(columns=[c]), y)
+drop_one = pd.Series(drop_one)
+drop_one_pct = pct(drop_one)
 
-    drop_one[c] = full_r2 - r2
+# Shapley / LMG values using R2 as the fit statistic
+r2_cache = {}
 
-pd.Series(drop_one).sort_values(ascending=False).to_frame("R2 Loss")
-```
-
-## Shapley Values
-
-```{python}
-def r2(features):
-
+def model_r2(features):
+    features = tuple(sorted(features))
     if len(features) == 0:
-        return 0
+        return 0.0
+    if features not in r2_cache:
+        r2_cache[features] = LinearRegression().fit(X[list(features)], y).score(X[list(features)], y)
+    return r2_cache[features]
 
-    return LinearRegression().fit(
-        X[list(features)],
-        y
-    ).score(X[list(features)], y)
+n = len(x_cols)
+shapley = pd.Series(0.0, index=x_cols)
 
-n = len(cols)
-
-shapley = {c: 0 for c in cols}
-
-for c in cols:
-
-    others = [x for x in cols if x != c]
-
+for c in x_cols:
+    others = [x for x in x_cols if x != c]
     for k in range(n):
-
+        weight = factorial(k) * factorial(n - k - 1) / factorial(n)
         for subset in itertools.combinations(others, k):
+            shapley[c] += weight * (model_r2(subset + (c,)) - model_r2(subset))
 
-            weight = (
-                factorial(k)
-                * factorial(n-k-1)
-                / factorial(n)
-            )
+shapley_pct = pct(shapley)
 
-            shapley[c] += weight * (
-                r2(subset + (c,))
-                - r2(subset)
-            )
-
-pd.Series(shapley).sort_values(ascending=False).to_frame("Shapley Value")
-```
-
-## Johnson Relative Weights
-
-```{python}
+# Johnson relative weights
 R = np.corrcoef(X, rowvar=False)
+rxy = np.array([np.corrcoef(X[c], y)[0, 1] for c in x_cols])
 
-rxy = np.array([
-    np.corrcoef(X[c], y)[0,1]
-    for c in cols
-])
+eigval, eigvec = np.linalg.eigh(R)
+eigval = np.clip(eigval, 0, None)
+L = eigvec @ np.diag(np.sqrt(eigval)) @ eigvec.T
+beta_star = np.linalg.pinv(L) @ rxy
+johnson = pd.Series((L ** 2) @ (beta_star ** 2), index=x_cols)
+johnson_pct = pct(johnson)
 
-eigval, eigvec = np.linalg.eig(R)
-
-Lambda = np.diag(np.sqrt(eigval))
-
-L = eigvec @ Lambda @ eigvec.T
-
-beta = np.linalg.inv(L) @ rxy
-
-johnson = (L**2) @ (beta**2)
-
-pd.Series(
-    johnson,
-    index=cols
-).sort_values(ascending=False).to_frame("Relative Weight")
-```
-
-## Random Forest Importance
-
-```{python}
+# Random Forest importance
 rf = RandomForestRegressor(
-    n_estimators=500,
-    random_state=1
+    n_estimators=1000,
+    random_state=495,
+    max_features="sqrt"
 )
-
 rf.fit(X, y)
-
-pd.Series(
-    rf.feature_importances_,
-    index=cols
-).sort_values(ascending=False).to_frame("Mean Decrease Gini")
+rf_pct = pct(pd.Series(rf.feature_importances_, index=x_cols))
 ```
 
-## Combined Results
+## Final Key Drivers Table
 
 ```{python}
 results = pd.DataFrame({
-    "Pearson": pearson,
-    "Std_Beta": betas,
-    "DropOne": pd.Series(drop_one),
-    "Shapley": pd.Series(shapley),
-    "Johnson": pd.Series(johnson, index=cols),
-    "RF_Gini": pd.Series(rf.feature_importances_, index=cols)
-})
+    "Perception": [label_map[c] for c in x_cols],
+    "Pearson Correlations": pearson_pct.values,
+    "Standardized Multiple Regression Coefficients": std_beta_pct.values,
+    "Drop-One Usefulness": drop_one_pct.values,
+    "LMG / Shapley Values": shapley_pct.values,
+    "Johnson's Epsilon": johnson_pct.values,
+    "Mean Decrease in RF Gini Coefficient": rf_pct.values
+}, index=range(1, len(x_cols) + 1))
 
-results.sort_values(
-    "Shapley",
-    ascending=False
-).round(4)
+results_display = results.copy()
+for c in results_display.columns[1:]:
+    results_display[c] = results_display[c].map(lambda x: f"{x:.1f}%")
+
+results_display.style.set_caption("Key Drivers of Customer Satisfaction").set_table_styles(pink_style)
 ```
+
+## Ranked Drivers by Shapley Value
+
+```{python}
+ranked = results.copy()
+ranked["Driver"] = x_cols
+ranked = ranked.sort_values("LMG / Shapley Values", ascending=False)
+ranked = ranked[["Driver", "Perception", "LMG / Shapley Values", "Johnson's Epsilon", "Mean Decrease in RF Gini Coefficient"]]
+
+ranked_display = ranked.copy()
+for c in ["LMG / Shapley Values", "Johnson's Epsilon", "Mean Decrease in RF Gini Coefficient"]:
+    ranked_display[c] = ranked_display[c].map(lambda x: f"{x:.1f}%")
+
+ranked_display.style.set_caption("Top Drivers Ranked by Shapley Importance").set_table_styles(pink_style)
+```
+
+## Interpretation
+
+The strongest drivers of customer satisfaction are the variables that consistently receive high importance across several methods. The Shapley and Johnson columns are especially useful because they partition the model's explanatory power across the drivers instead of double-counting overlapping relationships.
+
+```{python}
+top3 = ranked.head(3)[["Driver", "Perception", "LMG / Shapley Values"]].copy()
+top3["LMG / Shapley Values"] = top3["LMG / Shapley Values"].map(lambda x: f"{x:.1f}%")
+top3.style.set_caption("Top Three Drivers").set_table_styles(pink_style)
+```
+
+Overall, the key-drivers analysis suggests that satisfaction is most strongly associated with a small set of core perceptions. The exact ranking changes somewhat by method, which is expected because each method defines importance differently. Pearson correlations measure one-variable-at-a-time association, drop-one usefulness measures incremental value after controlling for all other variables, Shapley values average incremental value over all possible model orderings, Johnson's method approximates Shapley values for linear regression, and random forests allow nonlinear tree-based relationships.
+
+## Method Comparison
+
+Pearson correlations are easy to interpret, but they can overstate importance when drivers are correlated with each other. Drop-one usefulness and standardized regression coefficients can understate importance when predictors overlap. Shapley values solve this by allocating shared explanatory power across variables, but they require estimating many models. Johnson's relative weights provide a fast approximation to Shapley values for linear regression. Random forests are more flexible because they are not restricted to a linear structure, but their impurity-based importance values should be interpreted as model-based importance rather than causal effects.
 
 ## Conclusion
 
-Across nearly all methods, **impact**, **trust**, and **service** emerge as the strongest drivers of customer satisfaction. These variables consistently rank near the top in correlation, regression, Shapley decomposition, Johnson relative weights, and random forest importance measures.
+This analysis replicates the key-drivers framework from the lecture using the provided customer satisfaction survey data. The most reliable drivers are the ones that remain highly ranked across Shapley values, Johnson's relative weights, and random forest importance. These attributes should receive the most attention when deciding which customer perceptions to prioritize for improving satisfaction.

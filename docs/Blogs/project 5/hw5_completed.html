@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Khyati Parihar">
-<meta name="dcterms.date" content="2026-06-09">
+<meta name="dcterms.date" content="2026-06-11">
 
 <title>Key Drivers Analysis – Khyati’s Portfolio</title>
 <style>
@@ -158,15 +158,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
-  <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#pearson-correlations" id="toc-pearson-correlations" class="nav-link" data-scroll-target="#pearson-correlations">Pearson Correlations</a></li>
-  <li><a href="#standardized-regression-coefficients" id="toc-standardized-regression-coefficients" class="nav-link" data-scroll-target="#standardized-regression-coefficients">Standardized Regression Coefficients</a></li>
-  <li><a href="#drop-one-analysis-usefulness" id="toc-drop-one-analysis-usefulness" class="nav-link" data-scroll-target="#drop-one-analysis-usefulness">Drop-One Analysis (Usefulness)</a></li>
-  <li><a href="#shapley-values" id="toc-shapley-values" class="nav-link" data-scroll-target="#shapley-values">Shapley Values</a></li>
-  <li><a href="#johnson-relative-weights" id="toc-johnson-relative-weights" class="nav-link" data-scroll-target="#johnson-relative-weights">Johnson Relative Weights</a></li>
-  <li><a href="#random-forest-importance" id="toc-random-forest-importance" class="nav-link" data-scroll-target="#random-forest-importance">Random Forest Importance</a></li>
-  <li><a href="#combined-results" id="toc-combined-results" class="nav-link" data-scroll-target="#combined-results">Combined Results</a></li>
+  <ul class="collapse">
+  <li><a href="#objective" id="toc-objective" class="nav-link active" data-scroll-target="#objective">Objective</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#data-structure" id="toc-data-structure" class="nav-link" data-scroll-target="#data-structure">Data Structure</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#calculations" id="toc-calculations" class="nav-link" data-scroll-target="#calculations">Calculations</a></li>
+  <li><a href="#final-key-drivers-table" id="toc-final-key-drivers-table" class="nav-link" data-scroll-target="#final-key-drivers-table">Final Key Drivers Table</a></li>
+  <li><a href="#ranked-drivers-by-shapley-value" id="toc-ranked-drivers-by-shapley-value" class="nav-link" data-scroll-target="#ranked-drivers-by-shapley-value">Ranked Drivers by Shapley Value</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
+  <li><a href="#method-comparison" id="toc-method-comparison" class="nav-link" data-scroll-target="#method-comparison">Method Comparison</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
@@ -176,8 +177,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Key Drivers Analysis</h1>
-</div>
+<div class="quarto-title-block"><div><h1 class="title">Key Drivers Analysis</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+  <div class="quarto-categories">
+    <div class="quarto-category">Marketing Analytics</div>
+    <div class="quarto-category">Key Drivers</div>
+    <div class="quarto-category">Machine Learning</div>
+  </div>
+  </div>
 
 
 
@@ -193,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 9, 2026</p>
+      <p class="date">June 11, 2026</p>
     </div>
   </div>
   
@@ -205,18 +211,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This analysis identifies the key drivers of customer satisfaction using:</p>
-<ul>
-<li>Pearson correlations</li>
-<li>Standardized regression coefficients</li>
-<li>Drop-one (usefulness) analysis</li>
-<li>Shapley value decomposition of R²</li>
-<li>Johnson’s Relative Weights</li>
-<li>Random Forest Mean Decrease in Gini</li>
-</ul>
-<div id="5d553bb0" class="cell" data-execution_count="1">
+<style>
+:root {
+  --pink-dark: #9d174d;
+  --pink-main: #db2777;
+  --pink-soft: #fce7f3;
+  --pink-light: #fdf2f8;
+}
+
+body {
+  background: linear-gradient(180deg, #fff7fb 0%, #ffffff 30%);
+}
+
+h1, h2, h3 {
+  color: var(--pink-dark);
+}
+
+a {
+  color: var(--pink-main);
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table thead th {
+  background-color: var(--pink-soft) !important;
+  color: var(--pink-dark) !important;
+  border-bottom: 2px solid var(--pink-main) !important;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: var(--pink-light);
+}
+
+.callout-note {
+  border-left-color: var(--pink-main) !important;
+}
+</style>
+<section id="objective" class="level2">
+<h2 class="anchored" data-anchor-id="objective">Objective</h2>
+<p>This analysis identifies and quantifies the key drivers of customer satisfaction using the methods from the Week 9 Key Drivers lecture. The response variable is <strong>customer satisfaction</strong>, and the predictors are nine credit-card perception measures.</p>
+<p>The goal is to reproduce the structure of the key-drivers comparison table from the lecture and compare how different variable-importance methods rank the same attributes.</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div id="31d9813d" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
@@ -225,576 +268,624 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data_for_drivers_analysis.csv"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_columns"</span>, <span class="va">None</span>)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">"satisfaction"</span>]</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df.drop(columns<span class="op">=</span>[<span class="st">"brand"</span>,<span class="st">"id"</span>,<span class="st">"satisfaction"</span>])</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> X.columns.tolist()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pink_style <span class="op">=</span> [</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"thead th"</span>, <span class="st">"props"</span>: [(<span class="st">"background-color"</span>, <span class="st">"#fce7f3"</span>), (<span class="st">"color"</span>, <span class="st">"#9d174d"</span>)]},</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"tbody tr:nth-child(even)"</span>, <span class="st">"props"</span>: [(<span class="st">"background-color"</span>, <span class="st">"#fdf2f8"</span>)]},</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"td, th"</span>, <span class="st">"props"</span>: [(<span class="st">"text-align"</span>, <span class="st">"center"</span>)]},</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"caption"</span>, <span class="st">"props"</span>: [(<span class="st">"caption-side"</span>, <span class="st">"top"</span>), (<span class="st">"font-weight"</span>, <span class="st">"bold"</span>), (<span class="st">"color"</span>, <span class="st">"#9d174d"</span>)]}</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data_for_drivers_analysis.csv"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>y_col <span class="op">=</span> <span class="st">"satisfaction"</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>id_cols <span class="op">=</span> [<span class="st">"brand"</span>, <span class="st">"id"</span>]</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>x_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c <span class="kw">not</span> <span class="kw">in</span> id_cols <span class="op">+</span> [y_col]]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>label_map <span class="op">=</span> {</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"trust"</span>: <span class="st">"Is offered by a brand I trust"</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"build"</span>: <span class="st">"Helps build credit quickly"</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"differs"</span>: <span class="st">"Is different from other cards"</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"easy"</span>: <span class="st">"Is easy to use"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"appealing"</span>: <span class="st">"Has appealing benefits or rewards"</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rewarding"</span>: <span class="st">"Rewards me for responsible usage"</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"popular"</span>: <span class="st">"Is used by a lot of people"</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"service"</span>: <span class="st">"Provides outstanding customer service"</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"impact"</span>: <span class="st">"Makes a difference in my life"</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[x_cols].copy()</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[y_col].copy()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
-<section id="pearson-correlations" class="level2">
-<h2 class="anchored" data-anchor-id="pearson-correlations">Pearson Correlations</h2>
-<div id="95d13a35" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pearson <span class="op">=</span> X.<span class="bu">apply</span>(<span class="kw">lambda</span> s: s.corr(y))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pearson.sort_values(ascending<span class="op">=</span><span class="va">False</span>).to_frame(<span class="st">"Pearson Correlation"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="data-structure" class="level2">
+<h2 class="anchored" data-anchor-id="data-structure">Data Structure</h2>
+<div id="4e7c8839" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Column"</span>: df.columns,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Role"</span>: [<span class="st">"Ignore"</span> <span class="cf">if</span> c <span class="kw">in</span> id_cols <span class="cf">else</span> <span class="st">"Outcome"</span> <span class="cf">if</span> c <span class="op">==</span> y_col <span class="cf">else</span> <span class="st">"Driver"</span> <span class="cf">for</span> c <span class="kw">in</span> df.columns]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>summary.style.set_table_styles(pink_style)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="2">
-<div>
+<style type="text/css">
+#T_370cf thead th {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+#T_370cf tbody tr:nth-child(even) {
+  background-color: #fdf2f8;
+}
+#T_370cf td {
+  text-align: center;
+}
+#T_370cf  th {
+  text-align: center;
+}
+#T_370cf caption {
+  caption-side: top;
+  font-weight: bold;
+  color: #9d174d;
+}
+</style>
 
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<table id="T_370cf" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Pearson Correlation</th>
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_370cf_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Column</th>
+<th id="T_370cf_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Role</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">trust</th>
-<td>0.255706</td>
+<th id="T_370cf_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_370cf_row0_col0" class="data row0 col0">brand</td>
+<td id="T_370cf_row0_col1" class="data row0 col1">Ignore</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">impact</th>
-<td>0.254539</td>
+<th id="T_370cf_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_370cf_row1_col0" class="data row1 col0">id</td>
+<td id="T_370cf_row1_col1" class="data row1 col1">Ignore</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">service</th>
-<td>0.251098</td>
+<th id="T_370cf_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_370cf_row2_col0" class="data row2 col0">satisfaction</td>
+<td id="T_370cf_row2_col1" class="data row2 col1">Outcome</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">easy</th>
-<td>0.212985</td>
+<th id="T_370cf_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_370cf_row3_col0" class="data row3 col0">trust</td>
+<td id="T_370cf_row3_col1" class="data row3 col1">Driver</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">appealing</th>
-<td>0.207997</td>
+<th id="T_370cf_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_370cf_row4_col0" class="data row4 col0">build</td>
+<td id="T_370cf_row4_col1" class="data row4 col1">Driver</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">rewarding</th>
-<td>0.194561</td>
+<th id="T_370cf_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_370cf_row5_col0" class="data row5 col0">differs</td>
+<td id="T_370cf_row5_col1" class="data row5 col1">Driver</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">build</th>
-<td>0.191896</td>
+<th id="T_370cf_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_370cf_row6_col0" class="data row6 col0">easy</td>
+<td id="T_370cf_row6_col1" class="data row6 col1">Driver</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">differs</th>
-<td>0.184801</td>
+<th id="T_370cf_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_370cf_row7_col0" class="data row7 col0">appealing</td>
+<td id="T_370cf_row7_col1" class="data row7 col1">Driver</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">popular</th>
-<td>0.171425</td>
+<th id="T_370cf_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_370cf_row8_col0" class="data row8 col0">rewarding</td>
+<td id="T_370cf_row8_col1" class="data row8 col1">Driver</td>
+</tr>
+<tr class="even">
+<th id="T_370cf_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_370cf_row9_col0" class="data row9 col0">popular</td>
+<td id="T_370cf_row9_col1" class="data row9 col1">Driver</td>
+</tr>
+<tr class="odd">
+<th id="T_370cf_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_370cf_row10_col0" class="data row10 col0">service</td>
+<td id="T_370cf_row10_col1" class="data row10 col1">Driver</td>
+</tr>
+<tr class="even">
+<th id="T_370cf_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
+<td id="T_370cf_row11_col0" class="data row11 col0">impact</td>
+<td id="T_370cf_row11_col1" class="data row11 col1">Driver</td>
 </tr>
 </tbody>
 </table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="standardized-regression-coefficients" class="level2">
-<h2 class="anchored" data-anchor-id="standardized-regression-coefficients">Standardized Regression Coefficients</h2>
-<div id="688836b9" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> StandardScaler().fit_transform(X)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> (y <span class="op">-</span> y.mean()) <span class="op">/</span> y.std()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lm <span class="op">=</span> LinearRegression()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>lm.fit(Xs, ys)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>betas <span class="op">=</span> pd.Series(lm.coef_, index<span class="op">=</span>cols)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>betas.sort_values(ascending<span class="op">=</span><span class="va">False</span>).to_frame(<span class="st">"Standardized Beta"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Standardized Beta</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">impact</th>
-<td>0.128397</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">trust</th>
-<td>0.115729</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">service</th>
-<td>0.088372</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">appealing</th>
-<td>0.033828</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">differs</th>
-<td>0.027842</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">easy</th>
-<td>0.021966</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">build</th>
-<td>0.019975</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">popular</th>
-<td>0.016612</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">rewarding</th>
-<td>0.005066</td>
-</tr>
-</tbody>
-</table>
-
-</div>
 </div>
 </div>
 </section>
-<section id="drop-one-analysis-usefulness" class="level2">
-<h2 class="anchored" data-anchor-id="drop-one-analysis-usefulness">Drop-One Analysis (Usefulness)</h2>
-<div id="0e29b7fe" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>full_r2 <span class="op">=</span> LinearRegression().fit(X, y).score(X, y)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>drop_one <span class="op">=</span> {}</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> cols:</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    r2 <span class="op">=</span> LinearRegression().fit(</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        X.drop(columns<span class="op">=</span>[c]),</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        y</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    ).score(X.drop(columns<span class="op">=</span>[c]), y)</span>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<p>The analysis uses six variable-importance approaches. The lecture slide also shows polychoric correlations, but this Python version reports Pearson correlations because the provided assignment can be completed without a dedicated polychoric-correlation package:</p>
+<ol type="1">
+<li><strong>Pearson correlations</strong>: R² from a simple regression (correlation squared), normalized to sum to 100%.</li>
+<li><strong>Standardized regression coefficients</strong>: absolute standardized multiple-regression coefficients, normalized to sum to 100%.</li>
+<li><strong>Drop-one usefulness</strong>: decrease in full-model (R^2) after removing each driver, normalized to sum to 100%.</li>
+<li><strong>LMG / Shapley values</strong>: each driver’s average marginal contribution to (R^2) across all possible model-entry orders.</li>
+<li><strong>Johnson’s relative weights</strong>: a fast linear-regression approximation to Shapley values.</li>
+<li><strong>Random Forest importance</strong>: impurity-based feature importance from a random forest model.</li>
+</ol>
+</section>
+<section id="calculations" class="level2">
+<h2 class="anchored" data-anchor-id="calculations">Calculations</h2>
+<div id="bfa24320" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pct(s):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> pd.Series(s, index<span class="op">=</span>x_cols).astype(<span class="bu">float</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> s.<span class="bu">sum</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> total <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> s <span class="op">*</span> np.nan</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">100</span> <span class="op">*</span> s <span class="op">/</span> total</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Pearson: R² from simple regression (Slide 64)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>pearson <span class="op">=</span> pd.Series({c: X[c].corr(y)<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> c <span class="kw">in</span> x_cols})</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>pearson_pct <span class="op">=</span> pct(pearson)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardized regression coefficients: absolute standardized betas, normalized</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>scaler_x <span class="op">=</span> StandardScaler()</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>scaler_y <span class="op">=</span> StandardScaler()</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> scaler_x.fit_transform(X)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> scaler_y.fit_transform(y.to_numpy().reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)).ravel()</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>lm_std <span class="op">=</span> LinearRegression().fit(Xs, ys)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>std_beta <span class="op">=</span> pd.Series(lm_std.coef_, index<span class="op">=</span>x_cols)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>std_beta_pct <span class="op">=</span> pct((std_beta.<span class="bu">abs</span>())<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop-one usefulness: full R2 minus R2 without each driver, normalized</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>full_model <span class="op">=</span> LinearRegression().fit(X, y)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>full_r2 <span class="op">=</span> full_model.score(X, y)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>drop_one <span class="op">=</span> {}</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> x_cols:</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    X_minus <span class="op">=</span> X.drop(columns<span class="op">=</span>[c])</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    r2_minus <span class="op">=</span> LinearRegression().fit(X_minus, y).score(X_minus, y)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    drop_one[c] <span class="op">=</span> full_r2 <span class="op">-</span> r2_minus</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>drop_one <span class="op">=</span> pd.Series(drop_one)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>drop_one_pct <span class="op">=</span> pct(drop_one)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Shapley / LMG values using R2 as the fit statistic</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>r2_cache <span class="op">=</span> {}</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model_r2(features):</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> <span class="bu">tuple</span>(<span class="bu">sorted</span>(features))</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(features) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> features <span class="kw">not</span> <span class="kw">in</span> r2_cache:</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        r2_cache[features] <span class="op">=</span> LinearRegression().fit(X[<span class="bu">list</span>(features)], y).score(X[<span class="bu">list</span>(features)], y)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> r2_cache[features]</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(x_cols)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>shapley <span class="op">=</span> pd.Series(<span class="fl">0.0</span>, index<span class="op">=</span>x_cols)</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> x_cols:</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    others <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> x_cols <span class="cf">if</span> x <span class="op">!=</span> c]</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        weight <span class="op">=</span> factorial(k) <span class="op">*</span> factorial(n <span class="op">-</span> k <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> factorial(n)</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> subset <span class="kw">in</span> itertools.combinations(others, k):</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>            shapley[c] <span class="op">+=</span> weight <span class="op">*</span> (model_r2(subset <span class="op">+</span> (c,)) <span class="op">-</span> model_r2(subset))</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>shapley_pct <span class="op">=</span> pct(shapley)</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Johnson relative weights</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.corrcoef(X, rowvar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>rxy <span class="op">=</span> np.array([np.corrcoef(X[c], y)[<span class="dv">0</span>, <span class="dv">1</span>] <span class="cf">for</span> c <span class="kw">in</span> x_cols])</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>eigval, eigvec <span class="op">=</span> np.linalg.eigh(R)</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>eigval <span class="op">=</span> np.clip(eigval, <span class="dv">0</span>, <span class="va">None</span>)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> eigvec <span class="op">@</span> np.diag(np.sqrt(eigval)) <span class="op">@</span> eigvec.T</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>beta_star <span class="op">=</span> np.linalg.pinv(L) <span class="op">@</span> rxy</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>johnson <span class="op">=</span> pd.Series((L <span class="op">**</span> <span class="dv">2</span>) <span class="op">@</span> (beta_star <span class="op">**</span> <span class="dv">2</span>), index<span class="op">=</span>x_cols)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>johnson_pct <span class="op">=</span> pct(johnson)</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Random Forest importance</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestRegressor(</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    n_estimators<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">495</span>,</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    max_features<span class="op">=</span><span class="st">"sqrt"</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>rf.fit(X, y)</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>rf_pct <span class="op">=</span> pct(pd.Series(rf.feature_importances_, index<span class="op">=</span>x_cols))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="final-key-drivers-table" class="level2">
+<h2 class="anchored" data-anchor-id="final-key-drivers-table">Final Key Drivers Table</h2>
+<div id="8a04bcdc" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Perception"</span>: [label_map[c] <span class="cf">for</span> c <span class="kw">in</span> x_cols],</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pearson Correlations"</span>: pearson_pct.values,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Standardized Multiple Regression Coefficients"</span>: std_beta_pct.values,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Drop-One Usefulness"</span>: drop_one_pct.values,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"LMG / Shapley Values"</span>: shapley_pct.values,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Johnson's Epsilon"</span>: johnson_pct.values,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mean Decrease in RF Gini Coefficient"</span>: rf_pct.values</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(x_cols) <span class="op">+</span> <span class="dv">1</span>))</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    drop_one[c] <span class="op">=</span> full_r2 <span class="op">-</span> r2</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>pd.Series(drop_one).sort_values(ascending<span class="op">=</span><span class="va">False</span>).to_frame(<span class="st">"R2 Loss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>results_display <span class="op">=</span> results.copy()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> results_display.columns[<span class="dv">1</span>:]:</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    results_display[c] <span class="op">=</span> results_display[c].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>results_display.style.set_caption(<span class="st">"Key Drivers of Customer Satisfaction"</span>).set_table_styles(pink_style)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<div>
+<style type="text/css">
+#T_65780 thead th {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+#T_65780 tbody tr:nth-child(even) {
+  background-color: #fdf2f8;
+}
+#T_65780 td {
+  text-align: center;
+}
+#T_65780  th {
+  text-align: center;
+}
+#T_65780 caption {
+  caption-side: top;
+  font-weight: bold;
+  color: #9d174d;
+}
+</style>
 
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<div id="T_65780" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_65780-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Key Drivers of Customer Satisfaction
+</figcaption>
+<div aria-describedby="T_65780-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_65780" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">R2 Loss</th>
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_65780_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Perception</th>
+<th id="T_65780_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Pearson Correlations</th>
+<th id="T_65780_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Standardized Multiple Regression Coefficients</th>
+<th id="T_65780_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Drop-One Usefulness</th>
+<th id="T_65780_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">LMG / Shapley Values</th>
+<th id="T_65780_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">Johnson's Epsilon</th>
+<th id="T_65780_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Mean Decrease in RF Gini Coefficient</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">impact</th>
-<td>0.011203</td>
+<th id="T_65780_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">1</th>
+<td id="T_65780_row0_col0" class="data row0 col0">Is offered by a brand I trust</td>
+<td id="T_65780_row0_col1" class="data row0 col1">15.6%</td>
+<td id="T_65780_row0_col2" class="data row0 col2">32.8%</td>
+<td id="T_65780_row0_col3" class="data row0 col3">31.5%</td>
+<td id="T_65780_row0_col4" class="data row0 col4">19.8%</td>
+<td id="T_65780_row0_col5" class="data row0 col5">19.8%</td>
+<td id="T_65780_row0_col6" class="data row0 col6">14.5%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">trust</th>
-<td>0.008243</td>
+<th id="T_65780_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">2</th>
+<td id="T_65780_row1_col0" class="data row1 col0">Helps build credit quickly</td>
+<td id="T_65780_row1_col1" class="data row1 col1">8.8%</td>
+<td id="T_65780_row1_col2" class="data row1 col2">1.0%</td>
+<td id="T_65780_row1_col3" class="data row1 col3">1.0%</td>
+<td id="T_65780_row1_col4" class="data row1 col4">6.6%</td>
+<td id="T_65780_row1_col5" class="data row1 col5">6.6%</td>
+<td id="T_65780_row1_col6" class="data row1 col6">9.6%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">service</th>
-<td>0.004674</td>
+<th id="T_65780_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">3</th>
+<td id="T_65780_row2_col0" class="data row2 col0">Is different from other cards</td>
+<td id="T_65780_row2_col1" class="data row2 col1">8.1%</td>
+<td id="T_65780_row2_col2" class="data row2 col2">1.9%</td>
+<td id="T_65780_row2_col3" class="data row2 col3">2.1%</td>
+<td id="T_65780_row2_col4" class="data row2 col4">6.7%</td>
+<td id="T_65780_row2_col5" class="data row2 col5">7.0%</td>
+<td id="T_65780_row2_col6" class="data row2 col6">8.9%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">appealing</th>
-<td>0.000710</td>
+<th id="T_65780_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">4</th>
+<td id="T_65780_row3_col0" class="data row3 col0">Is easy to use</td>
+<td id="T_65780_row3_col1" class="data row3 col1">10.8%</td>
+<td id="T_65780_row3_col2" class="data row3 col2">1.2%</td>
+<td id="T_65780_row3_col3" class="data row3 col3">1.1%</td>
+<td id="T_65780_row3_col4" class="data row3 col4">8.5%</td>
+<td id="T_65780_row3_col5" class="data row3 col5">8.2%</td>
+<td id="T_65780_row3_col6" class="data row3 col6">10.0%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">differs</th>
-<td>0.000550</td>
+<th id="T_65780_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">5</th>
+<td id="T_65780_row4_col0" class="data row4 col0">Has appealing benefits or rewards</td>
+<td id="T_65780_row4_col1" class="data row4 col1">10.3%</td>
+<td id="T_65780_row4_col2" class="data row4 col2">2.8%</td>
+<td id="T_65780_row4_col3" class="data row4 col3">2.7%</td>
+<td id="T_65780_row4_col4" class="data row4 col4">8.4%</td>
+<td id="T_65780_row4_col5" class="data row4 col5">8.3%</td>
+<td id="T_65780_row4_col6" class="data row4 col6">10.2%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">easy</th>
-<td>0.000289</td>
+<th id="T_65780_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">6</th>
+<td id="T_65780_row5_col0" class="data row5 col0">Rewards me for responsible usage</td>
+<td id="T_65780_row5_col1" class="data row5 col1">9.0%</td>
+<td id="T_65780_row5_col2" class="data row5 col2">0.1%</td>
+<td id="T_65780_row5_col3" class="data row5 col3">0.1%</td>
+<td id="T_65780_row5_col4" class="data row5 col4">6.3%</td>
+<td id="T_65780_row5_col5" class="data row5 col5">6.0%</td>
+<td id="T_65780_row5_col6" class="data row5 col6">9.8%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">build</th>
-<td>0.000266</td>
+<th id="T_65780_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">7</th>
+<td id="T_65780_row6_col0" class="data row6 col0">Is used by a lot of people</td>
+<td id="T_65780_row6_col1" class="data row6 col1">7.0%</td>
+<td id="T_65780_row6_col2" class="data row6 col2">0.7%</td>
+<td id="T_65780_row6_col3" class="data row6 col3">0.8%</td>
+<td id="T_65780_row6_col4" class="data row6 col4">5.2%</td>
+<td id="T_65780_row6_col5" class="data row6 col5">5.4%</td>
+<td id="T_65780_row6_col6" class="data row6 col6">9.7%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">popular</th>
-<td>0.000204</td>
+<th id="T_65780_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">8</th>
+<td id="T_65780_row7_col0" class="data row7 col0">Provides outstanding customer service</td>
+<td id="T_65780_row7_col1" class="data row7 col1">15.0%</td>
+<td id="T_65780_row7_col2" class="data row7 col2">19.1%</td>
+<td id="T_65780_row7_col3" class="data row7 col3">17.9%</td>
+<td id="T_65780_row7_col4" class="data row7 col4">16.9%</td>
+<td id="T_65780_row7_col5" class="data row7 col5">16.6%</td>
+<td id="T_65780_row7_col6" class="data row7 col6">13.3%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">rewarding</th>
-<td>0.000016</td>
+<th id="T_65780_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">9</th>
+<td id="T_65780_row8_col0" class="data row8 col0">Makes a difference in my life</td>
+<td id="T_65780_row8_col1" class="data row8 col1">15.4%</td>
+<td id="T_65780_row8_col2" class="data row8 col2">40.4%</td>
+<td id="T_65780_row8_col3" class="data row8 col3">42.8%</td>
+<td id="T_65780_row8_col4" class="data row8 col4">21.6%</td>
+<td id="T_65780_row8_col5" class="data row8 col5">22.0%</td>
+<td id="T_65780_row8_col6" class="data row8 col6">13.9%</td>
 </tr>
 </tbody>
 </table>
-
+</div>
+</figure>
 </div>
 </div>
 </div>
 </section>
-<section id="shapley-values" class="level2">
-<h2 class="anchored" data-anchor-id="shapley-values">Shapley Values</h2>
-<div id="cad1e487" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> r2(features):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(features) <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<section id="ranked-drivers-by-shapley-value" class="level2">
+<h2 class="anchored" data-anchor-id="ranked-drivers-by-shapley-value">Ranked Drivers by Shapley Value</h2>
+<div id="98a0bb47" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> results.copy()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ranked[<span class="st">"Driver"</span>] <span class="op">=</span> x_cols</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> ranked.sort_values(<span class="st">"LMG / Shapley Values"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> ranked[[<span class="st">"Driver"</span>, <span class="st">"Perception"</span>, <span class="st">"LMG / Shapley Values"</span>, <span class="st">"Johnson's Epsilon"</span>, <span class="st">"Mean Decrease in RF Gini Coefficient"</span>]]</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> LinearRegression().fit(</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        X[<span class="bu">list</span>(features)],</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        y</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    ).score(X[<span class="bu">list</span>(features)], y)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(cols)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>shapley <span class="op">=</span> {c: <span class="dv">0</span> <span class="cf">for</span> c <span class="kw">in</span> cols}</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> cols:</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    others <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> cols <span class="cf">if</span> x <span class="op">!=</span> c]</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> subset <span class="kw">in</span> itertools.combinations(others, k):</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            weight <span class="op">=</span> (</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                factorial(k)</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span> factorial(n<span class="op">-</span>k<span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>                <span class="op">/</span> factorial(n)</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>            shapley[c] <span class="op">+=</span> weight <span class="op">*</span> (</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>                r2(subset <span class="op">+</span> (c,))</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span> r2(subset)</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>pd.Series(shapley).sort_values(ascending<span class="op">=</span><span class="va">False</span>).to_frame(<span class="st">"Shapley Value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ranked_display <span class="op">=</span> ranked.copy()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> [<span class="st">"LMG / Shapley Values"</span>, <span class="st">"Johnson's Epsilon"</span>, <span class="st">"Mean Decrease in RF Gini Coefficient"</span>]:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    ranked_display[c] <span class="op">=</span> ranked_display[c].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ranked_display.style.set_caption(<span class="st">"Top Drivers Ranked by Shapley Importance"</span>).set_table_styles(pink_style)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<div>
+<style type="text/css">
+#T_876a8 thead th {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+#T_876a8 tbody tr:nth-child(even) {
+  background-color: #fdf2f8;
+}
+#T_876a8 td {
+  text-align: center;
+}
+#T_876a8  th {
+  text-align: center;
+}
+#T_876a8 caption {
+  caption-side: top;
+  font-weight: bold;
+  color: #9d174d;
+}
+</style>
 
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<div id="T_876a8" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_876a8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Top Drivers Ranked by Shapley Importance
+</figcaption>
+<div aria-describedby="T_876a8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_876a8" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Shapley Value</th>
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_876a8_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Driver</th>
+<th id="T_876a8_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Perception</th>
+<th id="T_876a8_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">LMG / Shapley Values</th>
+<th id="T_876a8_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Johnson's Epsilon</th>
+<th id="T_876a8_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Mean Decrease in RF Gini Coefficient</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">impact</th>
-<td>0.023582</td>
+<th id="T_876a8_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">9</th>
+<td id="T_876a8_row0_col0" class="data row0 col0">impact</td>
+<td id="T_876a8_row0_col1" class="data row0 col1">Makes a difference in my life</td>
+<td id="T_876a8_row0_col2" class="data row0 col2">21.6%</td>
+<td id="T_876a8_row0_col3" class="data row0 col3">22.0%</td>
+<td id="T_876a8_row0_col4" class="data row0 col4">13.9%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">trust</th>
-<td>0.021611</td>
+<th id="T_876a8_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_876a8_row1_col0" class="data row1 col0">trust</td>
+<td id="T_876a8_row1_col1" class="data row1 col1">Is offered by a brand I trust</td>
+<td id="T_876a8_row1_col2" class="data row1 col2">19.8%</td>
+<td id="T_876a8_row1_col3" class="data row1 col3">19.8%</td>
+<td id="T_876a8_row1_col4" class="data row1 col4">14.5%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">service</th>
-<td>0.018405</td>
+<th id="T_876a8_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">8</th>
+<td id="T_876a8_row2_col0" class="data row2 col0">service</td>
+<td id="T_876a8_row2_col1" class="data row2 col1">Provides outstanding customer service</td>
+<td id="T_876a8_row2_col2" class="data row2 col2">16.9%</td>
+<td id="T_876a8_row2_col3" class="data row2 col3">16.6%</td>
+<td id="T_876a8_row2_col4" class="data row2 col4">13.3%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">easy</th>
-<td>0.009288</td>
+<th id="T_876a8_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">4</th>
+<td id="T_876a8_row3_col0" class="data row3 col0">easy</td>
+<td id="T_876a8_row3_col1" class="data row3 col1">Is easy to use</td>
+<td id="T_876a8_row3_col2" class="data row3 col2">8.5%</td>
+<td id="T_876a8_row3_col3" class="data row3 col3">8.2%</td>
+<td id="T_876a8_row3_col4" class="data row3 col4">10.0%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">appealing</th>
-<td>0.009161</td>
+<th id="T_876a8_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">5</th>
+<td id="T_876a8_row4_col0" class="data row4 col0">appealing</td>
+<td id="T_876a8_row4_col1" class="data row4 col1">Has appealing benefits or rewards</td>
+<td id="T_876a8_row4_col2" class="data row4 col2">8.4%</td>
+<td id="T_876a8_row4_col3" class="data row4 col3">8.3%</td>
+<td id="T_876a8_row4_col4" class="data row4 col4">10.2%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">differs</th>
-<td>0.007291</td>
+<th id="T_876a8_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">3</th>
+<td id="T_876a8_row5_col0" class="data row5 col0">differs</td>
+<td id="T_876a8_row5_col1" class="data row5 col1">Is different from other cards</td>
+<td id="T_876a8_row5_col2" class="data row5 col2">6.7%</td>
+<td id="T_876a8_row5_col3" class="data row5 col3">7.0%</td>
+<td id="T_876a8_row5_col4" class="data row5 col4">8.9%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">build</th>
-<td>0.007191</td>
+<th id="T_876a8_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">2</th>
+<td id="T_876a8_row6_col0" class="data row6 col0">build</td>
+<td id="T_876a8_row6_col1" class="data row6 col1">Helps build credit quickly</td>
+<td id="T_876a8_row6_col2" class="data row6 col2">6.6%</td>
+<td id="T_876a8_row6_col3" class="data row6 col3">6.6%</td>
+<td id="T_876a8_row6_col4" class="data row6 col4">9.6%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">rewarding</th>
-<td>0.006840</td>
+<th id="T_876a8_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">6</th>
+<td id="T_876a8_row7_col0" class="data row7 col0">rewarding</td>
+<td id="T_876a8_row7_col1" class="data row7 col1">Rewards me for responsible usage</td>
+<td id="T_876a8_row7_col2" class="data row7 col2">6.3%</td>
+<td id="T_876a8_row7_col3" class="data row7 col3">6.0%</td>
+<td id="T_876a8_row7_col4" class="data row7 col4">9.8%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">popular</th>
-<td>0.005642</td>
+<th id="T_876a8_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">7</th>
+<td id="T_876a8_row8_col0" class="data row8 col0">popular</td>
+<td id="T_876a8_row8_col1" class="data row8 col1">Is used by a lot of people</td>
+<td id="T_876a8_row8_col2" class="data row8 col2">5.2%</td>
+<td id="T_876a8_row8_col3" class="data row8 col3">5.4%</td>
+<td id="T_876a8_row8_col4" class="data row8 col4">9.7%</td>
 </tr>
 </tbody>
 </table>
-
+</div>
+</figure>
 </div>
 </div>
 </div>
 </section>
-<section id="johnson-relative-weights" class="level2">
-<h2 class="anchored" data-anchor-id="johnson-relative-weights">Johnson Relative Weights</h2>
-<div id="b8895240" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.corrcoef(X, rowvar<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rxy <span class="op">=</span> np.array([</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    np.corrcoef(X[c], y)[<span class="dv">0</span>,<span class="dv">1</span>]</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> cols</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>eigval, eigvec <span class="op">=</span> np.linalg.eig(R)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>Lambda <span class="op">=</span> np.diag(np.sqrt(eigval))</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> eigvec <span class="op">@</span> Lambda <span class="op">@</span> eigvec.T</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> np.linalg.inv(L) <span class="op">@</span> rxy</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>johnson <span class="op">=</span> (L<span class="op">**</span><span class="dv">2</span>) <span class="op">@</span> (beta<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>pd.Series(</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    johnson,</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>cols</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>).sort_values(ascending<span class="op">=</span><span class="va">False</span>).to_frame(<span class="st">"Relative Weight"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
+<p>The strongest drivers of customer satisfaction are the variables that consistently receive high importance across several methods. The Shapley and Johnson columns are especially useful because they partition the model’s explanatory power across the drivers instead of double-counting overlapping relationships.</p>
+<div id="65a61875" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>top3 <span class="op">=</span> ranked.head(<span class="dv">3</span>)[[<span class="st">"Driver"</span>, <span class="st">"Perception"</span>, <span class="st">"LMG / Shapley Values"</span>]].copy()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>top3[<span class="st">"LMG / Shapley Values"</span>] <span class="op">=</span> top3[<span class="st">"LMG / Shapley Values"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>top3.style.set_caption(<span class="st">"Top Three Drivers"</span>).set_table_styles(pink_style)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="6">
-<div>
+<style type="text/css">
+#T_5175d thead th {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+#T_5175d tbody tr:nth-child(even) {
+  background-color: #fdf2f8;
+}
+#T_5175d td {
+  text-align: center;
+}
+#T_5175d  th {
+  text-align: center;
+}
+#T_5175d caption {
+  caption-side: top;
+  font-weight: bold;
+  color: #9d174d;
+}
+</style>
 
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<div id="T_5175d" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_5175d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Top Three Drivers
+</figcaption>
+<div aria-describedby="T_5175d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_5175d" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Relative Weight</th>
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_5175d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Driver</th>
+<th id="T_5175d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Perception</th>
+<th id="T_5175d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">LMG / Shapley Values</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">impact</th>
-<td>0.023946</td>
+<th id="T_5175d_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">9</th>
+<td id="T_5175d_row0_col0" class="data row0 col0">impact</td>
+<td id="T_5175d_row0_col1" class="data row0 col1">Makes a difference in my life</td>
+<td id="T_5175d_row0_col2" class="data row0 col2">21.6%</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">trust</th>
-<td>0.021623</td>
+<th id="T_5175d_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_5175d_row1_col0" class="data row1 col0">trust</td>
+<td id="T_5175d_row1_col1" class="data row1 col1">Is offered by a brand I trust</td>
+<td id="T_5175d_row1_col2" class="data row1 col2">19.8%</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">service</th>
-<td>0.018134</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">appealing</th>
-<td>0.009099</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">easy</th>
-<td>0.008982</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">differs</th>
-<td>0.007594</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">build</th>
-<td>0.007217</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">rewarding</th>
-<td>0.006538</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">popular</th>
-<td>0.005878</td>
+<th id="T_5175d_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">8</th>
+<td id="T_5175d_row2_col0" class="data row2 col0">service</td>
+<td id="T_5175d_row2_col1" class="data row2 col1">Provides outstanding customer service</td>
+<td id="T_5175d_row2_col2" class="data row2 col2">16.9%</td>
 </tr>
 </tbody>
 </table>
-
+</div>
+</figure>
 </div>
 </div>
 </div>
+<p>Overall, the key-drivers analysis suggests that satisfaction is most strongly associated with a small set of core perceptions. The exact ranking changes somewhat by method, which is expected because each method defines importance differently. Pearson correlations measure one-variable-at-a-time association, drop-one usefulness measures incremental value after controlling for all other variables, Shapley values average incremental value over all possible model orderings, Johnson’s method approximates Shapley values for linear regression, and random forests allow nonlinear tree-based relationships.</p>
 </section>
-<section id="random-forest-importance" class="level2">
-<h2 class="anchored" data-anchor-id="random-forest-importance">Random Forest Importance</h2>
-<div id="8b0938ca" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestRegressor(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    n_estimators<span class="op">=</span><span class="dv">500</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">1</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>rf.fit(X, y)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>pd.Series(</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    rf.feature_importances_,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>cols</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>).sort_values(ascending<span class="op">=</span><span class="va">False</span>).to_frame(<span class="st">"Mean Decrease Gini"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Mean Decrease Gini</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">trust</th>
-<td>0.154975</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">impact</th>
-<td>0.140388</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">service</th>
-<td>0.130550</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">rewarding</th>
-<td>0.104456</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">build</th>
-<td>0.099188</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">easy</th>
-<td>0.098621</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">popular</th>
-<td>0.096231</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">differs</th>
-<td>0.091727</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">appealing</th>
-<td>0.083863</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="combined-results" class="level2">
-<h2 class="anchored" data-anchor-id="combined-results">Combined Results</h2>
-<div id="cf0936e4" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pearson"</span>: pearson,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Std_Beta"</span>: betas,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"DropOne"</span>: pd.Series(drop_one),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Shapley"</span>: pd.Series(shapley),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Johnson"</span>: pd.Series(johnson, index<span class="op">=</span>cols),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RF_Gini"</span>: pd.Series(rf.feature_importances_, index<span class="op">=</span>cols)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>results.sort_values(</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Shapley"</span>,</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    ascending<span class="op">=</span><span class="va">False</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>).<span class="bu">round</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Pearson</th>
-<th data-quarto-table-cell-role="th">Std_Beta</th>
-<th data-quarto-table-cell-role="th">DropOne</th>
-<th data-quarto-table-cell-role="th">Shapley</th>
-<th data-quarto-table-cell-role="th">Johnson</th>
-<th data-quarto-table-cell-role="th">RF_Gini</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">impact</th>
-<td>0.2545</td>
-<td>0.1284</td>
-<td>0.0112</td>
-<td>0.0236</td>
-<td>0.0239</td>
-<td>0.1404</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">trust</th>
-<td>0.2557</td>
-<td>0.1157</td>
-<td>0.0082</td>
-<td>0.0216</td>
-<td>0.0216</td>
-<td>0.1550</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">service</th>
-<td>0.2511</td>
-<td>0.0884</td>
-<td>0.0047</td>
-<td>0.0184</td>
-<td>0.0181</td>
-<td>0.1305</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">easy</th>
-<td>0.2130</td>
-<td>0.0220</td>
-<td>0.0003</td>
-<td>0.0093</td>
-<td>0.0090</td>
-<td>0.0986</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">appealing</th>
-<td>0.2080</td>
-<td>0.0338</td>
-<td>0.0007</td>
-<td>0.0092</td>
-<td>0.0091</td>
-<td>0.0839</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">differs</th>
-<td>0.1848</td>
-<td>0.0278</td>
-<td>0.0006</td>
-<td>0.0073</td>
-<td>0.0076</td>
-<td>0.0917</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">build</th>
-<td>0.1919</td>
-<td>0.0200</td>
-<td>0.0003</td>
-<td>0.0072</td>
-<td>0.0072</td>
-<td>0.0992</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">rewarding</th>
-<td>0.1946</td>
-<td>0.0051</td>
-<td>0.0000</td>
-<td>0.0068</td>
-<td>0.0065</td>
-<td>0.1045</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">popular</th>
-<td>0.1714</td>
-<td>0.0166</td>
-<td>0.0002</td>
-<td>0.0056</td>
-<td>0.0059</td>
-<td>0.0962</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
+<section id="method-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="method-comparison">Method Comparison</h2>
+<p>Pearson correlations are easy to interpret, but they can overstate importance when drivers are correlated with each other. Drop-one usefulness and standardized regression coefficients can understate importance when predictors overlap. Shapley values solve this by allocating shared explanatory power across variables, but they require estimating many models. Johnson’s relative weights provide a fast approximation to Shapley values for linear regression. Random forests are more flexible because they are not restricted to a linear structure, but their impurity-based importance values should be interpreted as model-based importance rather than causal effects.</p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>Across nearly all methods, <strong>impact</strong>, <strong>trust</strong>, and <strong>service</strong> emerge as the strongest drivers of customer satisfaction. These variables consistently rank near the top in correlation, regression, Shapley decomposition, Johnson relative weights, and random forest importance measures.</p>
+<p>This analysis replicates the key-drivers framework from the lecture using the provided customer satisfaction survey data. The most reliable drivers are the ones that remain highly ranked across Shapley values, Johnson’s relative weights, and random forest importance. These attributes should receive the most attention when deciding which customer perceptions to prioritize for improving satisfaction.</p>
 
+
+<!-- -->
 
 </section>
 
@@ -869,6 +960,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -1198,7 +1340,272 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
   });
-  </script>
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Key Drivers Analysis"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Khyati Parihar"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> today</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [Marketing Analytics, Key Drivers, Machine Learning]</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 2</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">    df-print: paged</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">style</span><span class="dt">&gt;</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="in">:root</span> {</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="va">--pink-dark</span><span class="ch">:</span> <span class="cn">#9d174d</span><span class="op">;</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="va">--pink-main</span><span class="ch">:</span> <span class="cn">#db2777</span><span class="op">;</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="va">--pink-soft</span><span class="ch">:</span> <span class="cn">#fce7f3</span><span class="op">;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="va">--pink-light</span><span class="ch">:</span> <span class="cn">#fdf2f8</span><span class="op">;</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>body {</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">background</span><span class="ch">:</span> <span class="fu">linear-gradient(</span><span class="dv">180</span><span class="dt">deg</span><span class="op">,</span> <span class="cn">#fff7fb</span> <span class="dv">0</span><span class="dt">%</span><span class="op">,</span> <span class="cn">#ffffff</span> <span class="dv">30</span><span class="dt">%</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>h1<span class="op">,</span> h2<span class="op">,</span> h3 {</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--pink-dark</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>a {</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--pink-main</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="fu">.table</span> {</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  <span class="kw">border-collapse</span><span class="ch">:</span> <span class="dv">collapse</span><span class="op">;</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  <span class="kw">width</span><span class="ch">:</span> <span class="dv">100</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="fu">.table</span> thead th {</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="kw">background-color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--pink-soft</span><span class="fu">)</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--pink-dark</span><span class="fu">)</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="kw">border-bottom</span><span class="ch">:</span> <span class="dv">2</span><span class="dt">px</span> <span class="dv">solid</span> <span class="fu">var(</span><span class="va">--pink-main</span><span class="fu">)</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="fu">.table</span> tbody tr<span class="in">:nth-child(</span><span class="dv">even</span><span class="in">)</span> {</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  <span class="kw">background-color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--pink-light</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="fu">.callout-note</span> {</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="kw">border-left-color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--pink-main</span><span class="fu">)</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">style</span><span class="dt">&gt;</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## Objective</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>This analysis identifies and quantifies the key drivers of customer satisfaction using the methods from the Week 9 Key Drivers lecture. The response variable is **customer satisfaction**, and the predictors are nine credit-card perception measures.</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>The goal is to reproduce the structure of the key-drivers comparison table from the lecture and compare how different variable-importance methods rank the same attributes.</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> factorial</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_columns"</span>, <span class="va">None</span>)</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>pink_style <span class="op">=</span> [</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"thead th"</span>, <span class="st">"props"</span>: [(<span class="st">"background-color"</span>, <span class="st">"#fce7f3"</span>), (<span class="st">"color"</span>, <span class="st">"#9d174d"</span>)]},</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"tbody tr:nth-child(even)"</span>, <span class="st">"props"</span>: [(<span class="st">"background-color"</span>, <span class="st">"#fdf2f8"</span>)]},</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"td, th"</span>, <span class="st">"props"</span>: [(<span class="st">"text-align"</span>, <span class="st">"center"</span>)]},</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"selector"</span>: <span class="st">"caption"</span>, <span class="st">"props"</span>: [(<span class="st">"caption-side"</span>, <span class="st">"top"</span>), (<span class="st">"font-weight"</span>, <span class="st">"bold"</span>), (<span class="st">"color"</span>, <span class="st">"#9d174d"</span>)]}</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data_for_drivers_analysis.csv"</span>)</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>y_col <span class="op">=</span> <span class="st">"satisfaction"</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>id_cols <span class="op">=</span> [<span class="st">"brand"</span>, <span class="st">"id"</span>]</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>x_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c <span class="kw">not</span> <span class="kw">in</span> id_cols <span class="op">+</span> [y_col]]</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>label_map <span class="op">=</span> {</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>    <span class="st">"trust"</span>: <span class="st">"Is offered by a brand I trust"</span>,</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>    <span class="st">"build"</span>: <span class="st">"Helps build credit quickly"</span>,</span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    <span class="st">"differs"</span>: <span class="st">"Is different from other cards"</span>,</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>    <span class="st">"easy"</span>: <span class="st">"Is easy to use"</span>,</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>    <span class="st">"appealing"</span>: <span class="st">"Has appealing benefits or rewards"</span>,</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rewarding"</span>: <span class="st">"Rewards me for responsible usage"</span>,</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>    <span class="st">"popular"</span>: <span class="st">"Is used by a lot of people"</span>,</span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>    <span class="st">"service"</span>: <span class="st">"Provides outstanding customer service"</span>,</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>    <span class="st">"impact"</span>: <span class="st">"Makes a difference in my life"</span></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[x_cols].copy()</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[y_col].copy()</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Structure</span></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Column"</span>: df.columns,</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Role"</span>: [<span class="st">"Ignore"</span> <span class="cf">if</span> c <span class="kw">in</span> id_cols <span class="cf">else</span> <span class="st">"Outcome"</span> <span class="cf">if</span> c <span class="op">==</span> y_col <span class="cf">else</span> <span class="st">"Driver"</span> <span class="cf">for</span> c <span class="kw">in</span> df.columns]</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>summary.style.set_table_styles(pink_style)</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Methods</span></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>The analysis uses six variable-importance approaches. The lecture slide also shows polychoric correlations, but this Python version reports Pearson correlations because the provided assignment can be completed without a dedicated polychoric-correlation package:</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Pearson correlations**: R² from a simple regression (correlation squared), normalized to sum to 100%.</span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Standardized regression coefficients**: absolute standardized multiple-regression coefficients, normalized to sum to 100%.</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Drop-one usefulness**: decrease in full-model <span class="sc">\(</span>R^2<span class="sc">\)</span> after removing each driver, normalized to sum to 100%.</span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**LMG / Shapley values**: each driver's average marginal contribution to <span class="sc">\(</span>R^2<span class="sc">\)</span> across all possible model-entry orders.</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Johnson's relative weights**: a fast linear-regression approximation to Shapley values.</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Random Forest importance**: impurity-based feature importance from a random forest model.</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Calculations</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pct(s):</span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> pd.Series(s, index<span class="op">=</span>x_cols).astype(<span class="bu">float</span>)</span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> s.<span class="bu">sum</span>()</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> total <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> s <span class="op">*</span> np.nan</span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">100</span> <span class="op">*</span> s <span class="op">/</span> total</span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a><span class="co"># Pearson: R² from simple regression (Slide 64)</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>pearson <span class="op">=</span> pd.Series({c: X[c].corr(y)<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> c <span class="kw">in</span> x_cols})</span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>pearson_pct <span class="op">=</span> pct(pearson)</span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardized regression coefficients: absolute standardized betas, normalized</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>scaler_x <span class="op">=</span> StandardScaler()</span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>scaler_y <span class="op">=</span> StandardScaler()</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> scaler_x.fit_transform(X)</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> scaler_y.fit_transform(y.to_numpy().reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)).ravel()</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>lm_std <span class="op">=</span> LinearRegression().fit(Xs, ys)</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>std_beta <span class="op">=</span> pd.Series(lm_std.coef_, index<span class="op">=</span>x_cols)</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>std_beta_pct <span class="op">=</span> pct((std_beta.<span class="bu">abs</span>())<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop-one usefulness: full R2 minus R2 without each driver, normalized</span></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>full_model <span class="op">=</span> LinearRegression().fit(X, y)</span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>full_r2 <span class="op">=</span> full_model.score(X, y)</span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>drop_one <span class="op">=</span> {}</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> x_cols:</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>    X_minus <span class="op">=</span> X.drop(columns<span class="op">=</span>[c])</span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>    r2_minus <span class="op">=</span> LinearRegression().fit(X_minus, y).score(X_minus, y)</span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>    drop_one[c] <span class="op">=</span> full_r2 <span class="op">-</span> r2_minus</span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>drop_one <span class="op">=</span> pd.Series(drop_one)</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>drop_one_pct <span class="op">=</span> pct(drop_one)</span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a><span class="co"># Shapley / LMG values using R2 as the fit statistic</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>r2_cache <span class="op">=</span> {}</span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model_r2(features):</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> <span class="bu">tuple</span>(<span class="bu">sorted</span>(features))</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(features) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> features <span class="kw">not</span> <span class="kw">in</span> r2_cache:</span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>        r2_cache[features] <span class="op">=</span> LinearRegression().fit(X[<span class="bu">list</span>(features)], y).score(X[<span class="bu">list</span>(features)], y)</span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> r2_cache[features]</span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(x_cols)</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>shapley <span class="op">=</span> pd.Series(<span class="fl">0.0</span>, index<span class="op">=</span>x_cols)</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> x_cols:</span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>    others <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> x_cols <span class="cf">if</span> x <span class="op">!=</span> c]</span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>        weight <span class="op">=</span> factorial(k) <span class="op">*</span> factorial(n <span class="op">-</span> k <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> factorial(n)</span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> subset <span class="kw">in</span> itertools.combinations(others, k):</span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>            shapley[c] <span class="op">+=</span> weight <span class="op">*</span> (model_r2(subset <span class="op">+</span> (c,)) <span class="op">-</span> model_r2(subset))</span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>shapley_pct <span class="op">=</span> pct(shapley)</span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a><span class="co"># Johnson relative weights</span></span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.corrcoef(X, rowvar<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a>rxy <span class="op">=</span> np.array([np.corrcoef(X[c], y)[<span class="dv">0</span>, <span class="dv">1</span>] <span class="cf">for</span> c <span class="kw">in</span> x_cols])</span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>eigval, eigvec <span class="op">=</span> np.linalg.eigh(R)</span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>eigval <span class="op">=</span> np.clip(eigval, <span class="dv">0</span>, <span class="va">None</span>)</span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> eigvec <span class="op">@</span> np.diag(np.sqrt(eigval)) <span class="op">@</span> eigvec.T</span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a>beta_star <span class="op">=</span> np.linalg.pinv(L) <span class="op">@</span> rxy</span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>johnson <span class="op">=</span> pd.Series((L <span class="op">**</span> <span class="dv">2</span>) <span class="op">@</span> (beta_star <span class="op">**</span> <span class="dv">2</span>), index<span class="op">=</span>x_cols)</span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a>johnson_pct <span class="op">=</span> pct(johnson)</span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a><span class="co"># Random Forest importance</span></span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestRegressor(</span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>    n_estimators<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">495</span>,</span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>    max_features<span class="op">=</span><span class="st">"sqrt"</span></span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>rf.fit(X, y)</span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>rf_pct <span class="op">=</span> pct(pd.Series(rf.feature_importances_, index<span class="op">=</span>x_cols))</span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a><span class="fu">## Final Key Drivers Table</span></span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Perception"</span>: [label_map[c] <span class="cf">for</span> c <span class="kw">in</span> x_cols],</span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pearson Correlations"</span>: pearson_pct.values,</span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Standardized Multiple Regression Coefficients"</span>: std_beta_pct.values,</span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Drop-One Usefulness"</span>: drop_one_pct.values,</span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a>    <span class="st">"LMG / Shapley Values"</span>: shapley_pct.values,</span>
+<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Johnson's Epsilon"</span>: johnson_pct.values,</span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mean Decrease in RF Gini Coefficient"</span>: rf_pct.values</span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(x_cols) <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a>results_display <span class="op">=</span> results.copy()</span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> results_display.columns[<span class="dv">1</span>:]:</span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>    results_display[c] <span class="op">=</span> results_display[c].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>results_display.style.set_caption(<span class="st">"Key Drivers of Customer Satisfaction"</span>).set_table_styles(pink_style)</span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ranked Drivers by Shapley Value</span></span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> results.copy()</span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a>ranked[<span class="st">"Driver"</span>] <span class="op">=</span> x_cols</span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> ranked.sort_values(<span class="st">"LMG / Shapley Values"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> ranked[[<span class="st">"Driver"</span>, <span class="st">"Perception"</span>, <span class="st">"LMG / Shapley Values"</span>, <span class="st">"Johnson's Epsilon"</span>, <span class="st">"Mean Decrease in RF Gini Coefficient"</span>]]</span>
+<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a>ranked_display <span class="op">=</span> ranked.copy()</span>
+<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> [<span class="st">"LMG / Shapley Values"</span>, <span class="st">"Johnson's Epsilon"</span>, <span class="st">"Mean Decrease in RF Gini Coefficient"</span>]:</span>
+<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a>    ranked_display[c] <span class="op">=</span> ranked_display[c].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a>ranked_display.style.set_caption(<span class="st">"Top Drivers Ranked by Shapley Importance"</span>).set_table_styles(pink_style)</span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretation</span></span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a>The strongest drivers of customer satisfaction are the variables that consistently receive high importance across several methods. The Shapley and Johnson columns are especially useful because they partition the model's explanatory power across the drivers instead of double-counting overlapping relationships.</span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>top3 <span class="op">=</span> ranked.head(<span class="dv">3</span>)[[<span class="st">"Driver"</span>, <span class="st">"Perception"</span>, <span class="st">"LMG / Shapley Values"</span>]].copy()</span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a>top3[<span class="st">"LMG / Shapley Values"</span>] <span class="op">=</span> top3[<span class="st">"LMG / Shapley Values"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.1f}</span><span class="ss">%"</span>)</span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a>top3.style.set_caption(<span class="st">"Top Three Drivers"</span>).set_table_styles(pink_style)</span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>Overall, the key-drivers analysis suggests that satisfaction is most strongly associated with a small set of core perceptions. The exact ranking changes somewhat by method, which is expected because each method defines importance differently. Pearson correlations measure one-variable-at-a-time association, drop-one usefulness measures incremental value after controlling for all other variables, Shapley values average incremental value over all possible model orderings, Johnson's method approximates Shapley values for linear regression, and random forests allow nonlinear tree-based relationships.</span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a><span class="fu">## Method Comparison</span></span>
+<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>Pearson correlations are easy to interpret, but they can overstate importance when drivers are correlated with each other. Drop-one usefulness and standardized regression coefficients can understate importance when predictors overlap. Shapley values solve this by allocating shared explanatory power across variables, but they require estimating many models. Johnson's relative weights provide a fast approximation to Shapley values for linear regression. Random forests are more flexible because they are not restricted to a linear structure, but their impurity-based importance values should be interpreted as model-based importance rather than causal effects.</span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conclusion</span></span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a>This analysis replicates the key-drivers framework from the lecture using the provided customer satisfaction survey data. The most reliable drivers are the ones that remain highly ranked across Shapley values, Johnson's relative weights, and random forest importance. These attributes should receive the most attention when deciding which customer perceptions to prioritize for improving satisfaction.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 
